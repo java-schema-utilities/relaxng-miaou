@@ -1,0 +1,280 @@
+Conversion from binary tree regular grammars to binary tree automata
+
+2002 August 25
+
+MURATA Makoto
+
+1. Algorithm
+
+Conversion to a binary tree regular grammar to a binary tree automaton 
+is done by converting each rule to a collection of transitions.
+We introduce one state per each non-terminal in the binary tree 
+regular grammar.  We also introduce states for capturing 
+binary tree regular expressions in the right-hand side of 
+production rules.
+
+We represent a binary tree automaton by a triplet 
+<start state set, final state set, transion set>.
+
+The operator "+" merges two binary tree automata by computing the 
+union of start state sets, that of final state sets, and that 
+of transition state sets.
+
+Two functions, namely exp2trns and expand, provide the
+conversion.  The function exp2trns receives a binary tree regular
+expression and returns a binary tree automaton.  A
+transition may contain dummy states, which are later expanded by
+actual states.  When a dummy state in a transition is expanded by
+multiple actual states, multiple transitions (i.e., one for
+each actual state) are created from this transition.
+
+
+exp2trns(<NotAllowed/>) =  ({}, {}, {})
+
+
+exp2trns(<End/>) = ({end}, {end}, {}), 
+
+	where "end" is a state for the empty binary tree.
+
+
+exp2trns(<Variable>) = ({}, {dummy}, {}), 
+
+	where the "dummy" state will be replaced by
+	actual states.
+
+
+exp2trns(<Ref name=nm/>) = ({}, {dummynm}, {}), 
+
+	where the "dummynm" state will be replaced by actual states
+	for the hedge defined by the referenced pattern.
+
+
+exp2trns(<Text>p</Text>) = 
+  expand[dummyright -> F1](
+   (S1, {}, T1)
+     +
+   ({}, {fnew}, {<textTransition target=fnew right=dummyright/>}))
+
+	where exp2trns(p) = (S1, F1, T1)
+	and fnew is a new state.
+
+	Note: <Text> represents a chunk of text, while <text/> represents 
+              more than zero chunks of text.
+
+exp2trns(<Element>nameClass pl pr</Element>) = 
+  expand[dummyleft -> Fl, dummyright -> Fr](
+  (Sl, {}, Tl) + 
+  (Sr, {}, Tr) +
+  ({}, {fnew}, {<elementTransition left=dummyleft right=dummyright target=fnew>
+                    nameClass</elementTransition>}))
+
+	where exp2trns(pl) = (Sl, Fl, Tl) and exp2trns(pr) = (Sr, Fr, Tr), 
+	and fnew is a new state.
+
+exp2trns(<Atomic>
+              <Data type=tp datatypeLibrary=dl>param... 
+                <Except>...</Except></Data> pr </Atomic>) =
+  expand[dummyright -> Fr](
+  (Sr, {}, Tr) +
+  ({}, {fnew}, {<atomicTransition target=fnew right=dummyright>
+                  <data type=tp datatypeLibrary=dl>param... 
+                     <except>...</except> </data>
+                </atomicTransition>}))
+
+	where exp2trns(pr) = (Sr, Fr, Tr), 
+	and fnew is a new state.
+
+exp2trns(<Atomic>
+           <Value type=tp datatypeLibrary=dl ns=n>string</Value> pr </Atomic>) =
+
+  (Sr, {}, Tr) +
+  expand[dummyright -> Fr](
+  ({}, {fnew}, {<atomicTransition target=fnew right=dummyright>
+                     <value type=tp datatypeLibrary=dl 
+                            ns=n>string</value>
+                  </atomicTransition>}))
+
+	where exp2trns(p) = (Sr, Fr, Tr), 
+	and fnew is a new state.
+
+exp2trns(F)(<List>pl pr</List>) = 
+   expand[dummyleft -> Fl, dummyright -> Fr](
+   (Sl, {}, Tl) + 
+   (Sr, {}, Tr) + 
+   ({}, {fnew}, {<listTransition target=fnew 
+                                 left=dummyleft right=dummyright/>}))
+
+	where exp2trns(pl) = (Sl, Fl, Tl) and 
+              exp2trns(pr) = (Sr, Fr, Tr), 
+	and fnew is a new state.
+
+exp2trns(<oneOrMoreAttribute>nmc pl pr</oneOrMoreAttribute>) =   
+   expand[dummyleft -> Fl, dummyright -> Fr](
+   (Sl, {}, Tl) + 
+   (Sr, {}, Tr) + 
+   ({}, {fnew}, {<oneOrMoreAttributeTransition target=fnew 
+                      left=dummyleft right=dummyright>
+                   nmc</oneOrMoreAttributeTransition>}))
+
+	where exp2trns(pl) = (Sl, Fl, Tl) and
+              exp2trns(pr) = (Sr, Fr, Tr), 
+	and fnew is a new state.
+
+exp2trns(<NonExistentAttribute>nameClass pr</NonExistentAttribute>) =   
+   expand[dummyright -> Fr](
+   (Sr, {}, Tr) + 
+   ({}, {fnew}, {<nonExistentAttributeTransition target=fnew
+                       right=dummyright>
+                    nmc
+                 </nonExistentAttributeTransition>}))
+
+	where exp2trns(pr) = (Sr, Fr, Tr) and fnew is a new state
+
+exp2trns(<Choice>p1 p2</Choice>) = 
+   (Sl, F1, Tl) + 
+   (Sr, F2, Tr)
+
+	where exp2trns(pl) = (Sl, Fl, Tl) and
+              exp2trns(pr) = (Sr, Fr, Tr)
+
+exp2trns(<Product>p1 p2</Product>) =
+   expand[dummy -> F1]((S2, F2, T2)) + 
+   (S1, {}, T1)
+
+	where exp2trns(p1) = (S1, F1, T1) and
+              exp2trns(p2) = (S2, F2, T2)
+
+Note: no states in exp2trns(p1) are dummy states.
+
+exp2trns(<Interleave>p1 p2 ptail</Interleave>) = 
+
+  (Stail, {}, Ttail) +
+
+  expand[dummy -> Ftail](
+      ({}, {}, {<branchingTransition
+                    source       = dummy
+                    firstTarget  = newFirst
+                    secondTarget = newSecond/>})) +
+
+      ({}, {}, T1) + 
+      ({}, {}, T2) + 
+
+      expand[ dummyend1   -> F1, dummyend2   -> F2](
+         ({}, {f0}, {<mergingTransition
+                      firstSource  = dummyend1
+                      secondSource = dummyend2
+                      target       = fnew/>}))
+  )
+
+        where exp2trns(pend) = (Stail, Ftail, Ttail); 
+              expand[dummy -> newFirst](exp2trns(p1)) = (S1, F1, T1),
+              expand[dummy -> newSecond](exp2trns(p2)) = (S2, F2, T2),
+
+
+exp2trns(<OneOrMore>p</OneOrMore>) = 
+  expand(dummy -> {dummy} Åæ Fr]((Sr, Fr, Tr)) 
+
+	where exp2trns(p) = (Sr, Fr, Tr)
+
+exp2trns(<BinaryTreeGrammar>
+           <Start>top</Start>
+           <Rule name="nm1">p1</Rule>
+           <Rule name="nm2">p2</Rule>...
+           <Rule name="nmn">pn</Rule>
+         </BinaryTreeGrammar>) 
+
+  =  (S1', {}, T1')+ (S2', {}, T2')+...+ (Sn', {}, Tn') + (St', Ft', Tt')
+
+	where exp2trns(top) = (St, Ft, Tt),
+
+              exp2trns(pi) = (Si, Fi, Ti),
+
+              (Si', Fi', Ti') = 
+                   expand[dummynm1 -> F1, dummynm2 -> F2, ..., 
+                          dummynmn -> Fn]((Si, Fi, Ti)), 
+
+              and
+
+              (St', Ft', Tt') = 
+                   expand[dummynm1 -> F1, dummynm2 -> F2, ..., 
+                          dummynmn -> Fn]((St, Ft, Tt))
+
+
+2. Implementation
+
+Class: Automatize.java
+
+This class provides a functional object.  It has no instance 
+variables.
+
+public methods
+
+void convert(BinaryTreeGrammar, MyBinaryTreeAutomaton)
+
+private methods
+
+void convert(BtrExpNotAllowed, MyBinaryTreeAutomaton)
+void convert(BtrExpEnd, MyBinaryTreeAutomaton)
+void convert(BtrExpVariable, MyBinaryTreeAutomaton)
+void convert(BtrExpRef, MyBinaryTreeAutomaton)
+void convert(BtrExpText, MyBinaryTreeAutomaton)
+void convert(BtrExpElement, MyBinaryTreeAutomaton)
+void convert(BtrExpAtomic, MyBinaryTreeAutomaton)
+void convert(BtrExpList, MyBinaryTreeAutomaton)
+void convert(BtrExpAttribute, MyBinaryTreeAutomaton)
+void convert(BtrExpNonExistentAttribute, MyBinaryTreeAutomaton)
+void convert(BtrExpChoice, MyBinaryTreeAutomaton)
+void convert(BtrExpProduct, MyBinaryTreeAutomaton)
+void convert(BtrExpInterleave, MyBinaryTreeAutomaton)
+void convert(BtrExpOneOrMore, MyBinaryTreeAutomaton)
+
+Each state is represented by an integer.  
+
+Positive integer states:
+
+These states may be renumbered.
+
+Negative integer states:
+
+These states do not immediately disappear and may not be renumbered.
+
+end:		start
+dummy:		right-most connector
+dummynm:	for each non-terminal
+
+We need a hash table for named pattern and a state.
+
+Temporary:
+
+These states are very temporary.
+
+dummyleft:	left child for <Element>, <List>, <Attribute>
+dummyright:	right child for <Element>, <Atomic>, <List>, 
+		<Attribute>, <NonExistentAttribute>
+dummystart1:	start p1 of <Interleave>
+dummystart2:	start p2 of <Interleave>
+dummyend1:	start p1 of <Interleave>
+dummyend2:	start p2 of <Interleave>
+
+
+---
+elementTransitionÇÃleft(dummyleft), right(dummyright)
+atomicTransitionÇÃright(dummyleft)
+listTransitionÇÃleft(dummyleft), right(dummyright)
+attributeTransitionÇÃleft(dummyleft), right(dummyright)
+nonExistentAttributeTransitionÇÃright(dummyright)
+branchingTransitionÇÃfirstTarget(dummystart1)Ç∆secondTarget(dummystart2)
+mergingTransitionÇÃfirstSource(dummyend1)Ç∆secondSource(dummyend2)
+
+textTransitionÇÃright(dummy)
+VariableÇ©ÇÁdummyÇ™ë¢ÇÁÇÍÇÈ
+OneOrMoreÇ©ÇÁÇ‡dummyÇ™ë¢ÇÁÇÍÇÈ
+
+productÇ…ÇÊÇÈdummyÇÃìWäJ
+oneOrMoreÇ…ÇÊÇÈdummyÇÃìWäJ
+ç≈å„ÇÃdummynmÇÃìWäJÅAÇ±ÇÍÇÕelementTransitionÇÃleftÇ∆ÇµÇƒÇæÇØèoåª
+
+
+
+when we merge btas, we have to avoid duplication of transitions.
+For this purpose, we need "equals".
