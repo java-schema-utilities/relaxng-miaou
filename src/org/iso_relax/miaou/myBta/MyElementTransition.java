@@ -1,8 +1,11 @@
 package org.iso_relax.miaou.myBta;
 
 import org.iso_relax.miaou.abstractBta.*;
+import org.iso_relax.miaou.houseKeeping.BinaryPrinter;
 import java.util.ArrayList;
 import java.io.PrintWriter;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
@@ -18,15 +21,23 @@ public class MyElementTransition extends AbstractElementTransition {
    * @param writer
    */
   public void compactPrint(PrintWriter writer) {
-    writer.print("et ");
+    writer.print("et left:");
     writer.print(getLeft());
-    writer.print(" ");
+    writer.print(" right:");
     writer.print(getRight());
-    writer.print(" ");
+    writer.print(" target:");
     writer.print(getTarget());
-    writer.print(" ");
-    ((IAbstractNameClassChoice)getNameClass()).compactPrint(writer);
+    writer.print(" nc:");
+    writer.print(getNameClass());
     writer.println();
+  }
+
+  public void binPrint(DataOutputStream dos) throws IOException {
+    dos.writeByte(BinaryPrinter.ELEMENT_TRANSITION);
+    dos.writeShort(getLeft());
+    dos.writeShort(getRight());
+    dos.writeShort(getTarget());
+    dos.writeShort(getNameClass());
   }
 
   public int getSecondTarget() {

@@ -2,6 +2,7 @@ package org.iso_relax.miaou.mySs;
 
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
+import org.iso_relax.miaou.houseKeeping.SymbolTables;
 
 /**
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
@@ -53,7 +54,10 @@ public class Driver {
         return;
       }
 
-      new AttributeNormalizer().normalize(mrg);
+    SymbolTables symbolTables = new SymbolTables ();
+    symbolTables.enter(mrg);
+
+      new AttributeNormalizer(symbolTables).normalize(mrg);
       serializerSs.serialize(mrg.makeDocument());
 
 

@@ -1,7 +1,7 @@
 package org.iso_relax.miaou.bta;
 
 /**
- * @version binaryTreeAutomaton.rng 1.0 (Sat Sep 07 19:30:30 JST 2002)
+ * @version binaryTreeAutomaton.rng 1.0 (Sat Oct 19 02:26:42 JST 2002)
  * @author  Relaxer 0.17b (http://www.relaxer.org)
  */
 public class RContext {

@@ -2,6 +2,7 @@ package org.iso_relax.miaou.mySs;
 
 import org.iso_relax.miaou.ss.PatternAttribute;
 import java.util.LinkedList;
+import java.util.List;
 import org.iso_relax.miaou.ss.IPatternChoice;
 import org.iso_relax.miaou.ss.PatternChoice;
 import org.iso_relax.miaou.ss.PatternGroup;
@@ -15,6 +16,7 @@ import org.iso_relax.miaou.ss.INameClassChoice;
 import org.iso_relax.miaou.ss.NameClassName;
 import org.iso_relax.miaou.ss.ExceptNameClass;
 import org.iso_relax.miaou.ss.PatternNonExistentAttribute;
+import org.iso_relax.miaou.houseKeeping.SymbolTables;
 
 /**
  *
@@ -28,35 +30,41 @@ import org.iso_relax.miaou.ss.PatternNonExistentAttribute;
  * <li>&lt;choice&gt;p1 p2 &lt;/choice&gt;</li>
  * </ul>
  *
- * Case 1: (p1 | p2 | ... | pi | @n1[p1] | @n2[p2] | ... | @nj[pj] )+
- *
- * 1) j = 0
+ * <ul>
+ * <li>Case 1: (p1 | p2 | ... | pi | @n1[p1] | @n2[p2] | ... | @nj[pj] )+
+ * <ol>
+ * <li>1) j = 0 <br>
  *
  * original = (p1 | p2 | ... | pi)+
- *
- * 2) i = 0
+ * </li>
+ * <li>2) i = 0 <br>
  *
  * normalizeOneOrMoreAttributes({@n1[p1], @n2[p2], ..., @nj[pj]})
- *
- * 3) otherwise
+ * </li>
+ * <li>3) otherwise <br>
  *
  * normalizeOneOrMoreAttributes({@n1[p1], @n2[p2], ... , @nj[pj]})
  *   | ((@n1[p1]* |  @n2[p2]* | ... | @nj[pj]*) (p1 | p2 | ... | pi)+)
- *
- *
- * Case 2: (p1 | p2 | ... | pi | @n1[p1] | @n2[p2] | ... | @nj[pj] )*
- *
- * 1) j = 0
+ * </li>
+ * </ol>
+ * </li>
+ * <li>Case 2: (p1 | p2 | ... | pi | @n1[p1] | @n2[p2] | ... | @nj[pj] )*
+ * <ol>
+ * <li>1) j = 0<br>
  *
  * original = (p1 | p2 | ... | pi)*
+ * </li>
+ * <li>2) i = 0<br>
  *
- * 2) i = 0
+ * original = @n1[p1]* |  @n2[p2]* | ... | @nj[pj]*
+ * </li>
+ * <li>3) otherwise<br>
  *
- * @n1[p1]* |  @n2[p2]* | ... | @nj[pj]*
- *
- * 3) otherwise
- *
- * (@n1[p1]* |  @n2[p2]* | ... | @nj[pj]*) (p1 | p2 | ... | pi)*
+ * use (@n1[p1]* |  @n2[p2]* | ... | @nj[pj]*) (p1 | p2 | ... | pi)*
+ * </li>
+ * </ol>
+ * </li>
+ * </ul>
  *
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
  * @version 0.3
@@ -66,9 +74,11 @@ import org.iso_relax.miaou.ss.PatternNonExistentAttribute;
 public class AttributeNormalizer {
 
   private org.iso_relax.miaou.ss.ISimpleSyntaxFactory factory;
+  private SymbolTables symbolTables;
 
-  public AttributeNormalizer() {
+  public AttributeNormalizer(SymbolTables symbolTables) {
     factory = org.iso_relax.miaou.ss.SimpleSyntaxFactory.getFactory();
+    this.symbolTables = symbolTables;
   }
 
   /**
@@ -109,7 +119,7 @@ public class AttributeNormalizer {
         new AttributeGetter(attributesOutsideOneOrMore);
       org.iso_relax.miaou.ss.URVisitor.traverse(grammar, attributeGetter);
       for (int i = 0; i < attributesOutsideOneOrMore.size(); i++) {
-        convertAttributeOutsideOneOrMore(
+        convertAttributeOutsideOfOneOrMore(
           (PatternAttribute)attributesOutsideOneOrMore.get(i));
       }
   }
@@ -179,7 +189,7 @@ public class AttributeNormalizer {
                 attributesUnderChoice);
     }
     else {
-        convertOneOrMoreWhenAttributesOnlyOutsideZeroOrMore(oneOrMore,
+        convertOneOrMoreWhenAttributesOnlyOutsideOfZeroOrMore(oneOrMore,
                 attributesUnderChoice);
     }
   }
@@ -217,7 +227,7 @@ public class AttributeNormalizer {
    * @param attributesUnderChoice a list of &lt;attribute&gt;s.
    */
 
-  private void convertOneOrMoreWhenAttributesOnlyOutsideZeroOrMore(
+  private void convertOneOrMoreWhenAttributesOnlyOutsideOfZeroOrMore(
                   PatternOneOrMore  oneOrMore,
                   LinkedList        attributesUnderChoice) {
 
@@ -257,7 +267,7 @@ public class AttributeNormalizer {
                                                           nonAttributesUnderChoice);
     }
     else {
-        convertOneOrMoreWhenBothOutsideZeroOrMore(oneOrMore,
+        convertOneOrMoreWhenBothOutsideOfZeroOrMore(oneOrMore,
                                                           attributesUnderChoice,
                                                           nonAttributesUnderChoice);
     }
@@ -313,7 +323,7 @@ public class AttributeNormalizer {
    *
    */
 
-  private void convertOneOrMoreWhenBothOutsideZeroOrMore(
+  private void convertOneOrMoreWhenBothOutsideOfZeroOrMore(
                 PatternOneOrMore oneOrMore,
                 LinkedList attributesUnderChoice,
                 LinkedList nonAttributesUnderChoice) {
@@ -383,7 +393,7 @@ public class AttributeNormalizer {
 
     PatternOneOrMoreAttribute oneOrMoreAttribute
       = factory.createPatternOneOrMoreAttribute();
-    oneOrMoreAttribute.setNameClass(((MyPatternAttribute)attribute).getMyNameClass().deepCopy());
+    oneOrMoreAttribute.setSyntaxExtensionNc(((MyPatternAttribute)attribute).getSyntaxExtensionNc());
     oneOrMoreAttribute.setPattern(((IMyPatternChoice)attribute.getPattern()).deepCopy());
     return oneOrMoreAttribute;
   }
@@ -454,11 +464,10 @@ public class AttributeNormalizer {
    * @{a1,a2,...,an}[p] = @a1[p]+ | @a2[p]+ | ... | @an[p]+
    */
 
-  private void convertAttributeOutsideOneOrMore (PatternAttribute attribute) {
+  private void convertAttributeOutsideOfOneOrMore (PatternAttribute attribute) {
 
     LinkedList names = new LinkedList();
-    NameClassNameGetter nameClassNameGetter = new NameClassNameGetter(names);
-    org.iso_relax.miaou.ss.URVisitor.traverse(attribute, nameClassNameGetter);
+    symbolTables.getPositiveNameClassNames(attribute.getSyntaxExtensionNc(), names);
 
     IPatternChoice rewrittenPattern =
       oneAttribute2oneOrMoreAttribute(names, attribute.getPattern());
@@ -477,11 +486,11 @@ public class AttributeNormalizer {
             LinkedList names,
             IPatternChoice pattern) {
 
-    NameClassName firstName = (NameClassName)names.removeFirst();
+    int nameClassID = ((Integer)names.removeFirst()).intValue();
 
     PatternOneOrMoreAttribute oneOrMoreAttribute
       = factory.createPatternOneOrMoreAttribute();
-    oneOrMoreAttribute.setNameClass(((IMyNameClassChoice)firstName).deepCopy());
+    oneOrMoreAttribute.setSyntaxExtensionNc(nameClassID);
     oneOrMoreAttribute.setPattern(((IMyPatternChoice)pattern).deepCopy());
 
     if (names.isEmpty()) {
@@ -505,23 +514,23 @@ public class AttributeNormalizer {
 
     IMyPatternChoice pattern = (IMyPatternChoice)element.getPattern();
 
-    IMyNameClassChoice nameClass =
-      (IMyNameClassChoice)getAttributeNameClasses(pattern);
+    int anyNameClassID =
+      symbolTables.getNameClassIdForAnyName(SymbolTables.NON_EXISTENT_INDEX);
+
+    int choiceOfNameClasses =
+      getAttributeNameClassID(pattern);
 
     PatternNonExistentAttribute nea =
        factory.createPatternNonExistentAttribute();
+
+    nea.setSyntaxExtensionNc(anyNameClassID);
+    nea.setSyntaxExtensionExceptNc(choiceOfNameClasses);
 
     PatternGroup group = factory.createPatternGroup();
 
     group.setPattern1(nea);
     group.setPattern2(pattern.deepCopy()); //deepCopying should precede replacement
 
-    nea.setNameClass(factory.createNameClassAnyName());
-    ExceptNameClass enc = factory.createExceptNameClass();
-    if (nameClass != null) {
-      enc.setNameClass(nameClass.deepCopy());
-      nea.setExceptNameClass(enc);
-    }
 
     if (pattern instanceof PatternEmpty)
       replace(element, pattern, nea);
@@ -539,10 +548,10 @@ public class AttributeNormalizer {
     IMyPatternChoice patternOne = (IMyPatternChoice)choice.getPattern1();
     IMyPatternChoice patternTwo = (IMyPatternChoice)choice.getPattern2();
 
-    IMyNameClassChoice nameClassOne =
-      (IMyNameClassChoice)getAttributeNameClasses(patternOne);
-    IMyNameClassChoice nameClassTwo =
-      (IMyNameClassChoice)getAttributeNameClasses(patternTwo);
+    int nameClassOne =
+      getAttributeNameClassID(patternOne);
+    int nameClassTwo =
+      getAttributeNameClassID(patternTwo);
 
     PatternNonExistentAttribute nea1 =
        factory.createPatternNonExistentAttribute();
@@ -558,36 +567,32 @@ public class AttributeNormalizer {
     group2.setPattern1(nea2);
     group2.setPattern2(patternTwo.deepCopy()); //deepCopying should precede replacement
 
-    if ((nameClassOne == null) && (nameClassTwo == null))
+    if ((nameClassOne == SymbolTables.NON_EXISTENT_INDEX) && (nameClassTwo == SymbolTables.NON_EXISTENT_INDEX))
       return;
-    else if ((nameClassOne == null)  && (nameClassTwo != null)){
-      nea1.setNameClass(nameClassTwo.deepCopy());
+    else if ((nameClassOne == SymbolTables.NON_EXISTENT_INDEX)  && (nameClassTwo != SymbolTables.NON_EXISTENT_INDEX)){
+      nea1.setSyntaxExtensionNc(nameClassTwo);
       if (patternOne instanceof PatternEmpty)
         replace(choice, patternOne, nea1);
       else
         replace(choice, patternOne, group1);
     }
-    else if ((nameClassOne != null) && (nameClassTwo == null)) {
-      nea2.setNameClass(nameClassOne.deepCopy());
+    else if ((nameClassOne != SymbolTables.NON_EXISTENT_INDEX) && (nameClassTwo == SymbolTables.NON_EXISTENT_INDEX)) {
+      nea2.setSyntaxExtensionNc(nameClassOne);
       if (patternTwo instanceof PatternEmpty)
         replace(choice, patternTwo, nea2);
       else
         replace(choice, patternTwo, group2);
     }
     else {
-      nea1.setNameClass(nameClassTwo.deepCopy());
-      ExceptNameClass enc1 = factory.createExceptNameClass();
-      enc1.setNameClass(nameClassOne.deepCopy());
-      nea1.setExceptNameClass(enc1);
+      nea1.setSyntaxExtensionNc(nameClassTwo);
+      nea1.setSyntaxExtensionExceptNc(nameClassOne);
       if (patternOne instanceof PatternEmpty)
         replace(choice, patternOne, nea1);
       else
         replace(choice, patternOne, group1);
 
-      nea2.setNameClass(nameClassOne.deepCopy());
-      ExceptNameClass enc2 = factory.createExceptNameClass();
-      enc2.setNameClass(nameClassTwo.deepCopy());
-      nea2.setExceptNameClass(enc2);
+      nea2.setSyntaxExtensionNc(nameClassOne);
+      nea2.setSyntaxExtensionExceptNc(nameClassTwo);
       if (patternTwo instanceof PatternEmpty)
         replace(choice, patternTwo, nea2);
       else
@@ -601,12 +606,12 @@ public class AttributeNormalizer {
    * @return &lt;choice&gt; of all nameclasses.
    */
 
-  private INameClassChoice getAttributeNameClasses(IPatternChoice pattern) {
+  private int getAttributeNameClassID(IPatternChoice pattern) {
     AttributeNameClassGetter attributeNameClassGetter =
-      new AttributeNameClassGetter();
+      new AttributeNameClassGetter(symbolTables);
     org.iso_relax.miaou.ss.URVisitor.traverse(pattern,
                                           attributeNameClassGetter);
-    return attributeNameClassGetter.getNameClass();
+    return attributeNameClassGetter.getNameClassID();
   }
 
 

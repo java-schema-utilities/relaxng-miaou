@@ -1,10 +1,70 @@
 package org.iso_relax.miaou.ss;
 
 /**
- * @version simpleSyntax.rng 1.0 (Sat Sep 07 19:36:09 JST 2002)
+ * @version simpleSyntax.rng 1.0 (Sat Oct 19 02:27:01 JST 2002)
  * @author  Relaxer 0.17b (http://www.relaxer.org)
  */
 public interface IRVisitor {
+    /**
+     * Visits this node for enter behavior.
+     *
+     * @param visitable
+     * @return boolean
+     */
+    boolean enter(PatternData visitable);
+
+    /**
+     * Visits this node for leave behavior.
+     *
+     * @param visitable
+     */
+    void leave(PatternData visitable);
+
+    /**
+     * Visits this node for enter behavior.
+     *
+     * @param visitable
+     * @return boolean
+     */
+    boolean enter(Param visitable);
+
+    /**
+     * Visits this node for leave behavior.
+     *
+     * @param visitable
+     */
+    void leave(Param visitable);
+
+    /**
+     * Visits this node for enter behavior.
+     *
+     * @param visitable
+     * @return boolean
+     */
+    boolean enter(ExceptPattern visitable);
+
+    /**
+     * Visits this node for leave behavior.
+     *
+     * @param visitable
+     */
+    void leave(ExceptPattern visitable);
+
+    /**
+     * Visits this node for enter behavior.
+     *
+     * @param visitable
+     * @return boolean
+     */
+    boolean enter(PatternAttribute visitable);
+
+    /**
+     * Visits this node for leave behavior.
+     *
+     * @param visitable
+     */
+    void leave(PatternAttribute visitable);
+
     /**
      * Visits this node for enter behavior.
      *
@@ -79,66 +139,6 @@ public interface IRVisitor {
      * @param visitable
      */
     void leave(NameClassName visitable);
-
-    /**
-     * Visits this node for enter behavior.
-     *
-     * @param visitable
-     * @return boolean
-     */
-    boolean enter(PatternData visitable);
-
-    /**
-     * Visits this node for leave behavior.
-     *
-     * @param visitable
-     */
-    void leave(PatternData visitable);
-
-    /**
-     * Visits this node for enter behavior.
-     *
-     * @param visitable
-     * @return boolean
-     */
-    boolean enter(Param visitable);
-
-    /**
-     * Visits this node for leave behavior.
-     *
-     * @param visitable
-     */
-    void leave(Param visitable);
-
-    /**
-     * Visits this node for enter behavior.
-     *
-     * @param visitable
-     * @return boolean
-     */
-    boolean enter(ExceptPattern visitable);
-
-    /**
-     * Visits this node for leave behavior.
-     *
-     * @param visitable
-     */
-    void leave(ExceptPattern visitable);
-
-    /**
-     * Visits this node for enter behavior.
-     *
-     * @param visitable
-     * @return boolean
-     */
-    boolean enter(PatternAttribute visitable);
-
-    /**
-     * Visits this node for leave behavior.
-     *
-     * @param visitable
-     */
-    void leave(PatternAttribute visitable);
 
     /**
      * Visits this node for enter behavior.
@@ -386,14 +386,14 @@ public interface IRVisitor {
      * @param visitable
      * @return boolean
      */
-    boolean enter(NameClass visitable);
+    boolean enter(NameClassID visitable);
 
     /**
      * Visits this node for leave behavior.
      *
      * @param visitable
      */
-    void leave(NameClass visitable);
+    void leave(NameClassID visitable);
 
     /**
      * Visits this node for enter behavior.
@@ -409,4 +409,19 @@ public interface IRVisitor {
      * @param visitable
      */
     void leave(Pattern visitable);
+
+    /**
+     * Visits this node for enter behavior.
+     *
+     * @param visitable
+     * @return boolean
+     */
+    boolean enter(ExceptNameClassID visitable);
+
+    /**
+     * Visits this node for leave behavior.
+     *
+     * @param visitable
+     */
+    void leave(ExceptNameClassID visitable);
 }

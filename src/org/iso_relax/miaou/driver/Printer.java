@@ -4,6 +4,7 @@ import org.iso_relax.miaou.ss.RootGrammar;
 import org.iso_relax.miaou.btg.BinaryTreeGrammar;
 import org.iso_relax.miaou.bta.BinaryTreeAutomaton;
 import org.iso_relax.miaou.abstractBta.AbstractBinaryTreeAutomaton;
+import org.iso_relax.miaou.houseKeeping.SymbolTables;
 import java.io.OutputStream;
 import java.io.File;
 import java.io.PrintWriter;
@@ -31,9 +32,14 @@ public class Printer {
     return printer;
   }
 
-  public static void printTable(AbstractBinaryTreeAutomaton bta, OutputStream os) {
+  public static void printTable(
+    AbstractBinaryTreeAutomaton bta,
+    SymbolTables symbolTables,
+    OutputStream os) {
+
     try {
       PrintWriter writer = new PrintWriter (new OutputStreamWriter(os, "UTF-8"));
+      symbolTables.print(writer);
       bta.compactPrint(writer);
       writer.close();
       os.close();

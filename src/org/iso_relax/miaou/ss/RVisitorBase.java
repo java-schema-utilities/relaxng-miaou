@@ -1,10 +1,82 @@
 package org.iso_relax.miaou.ss;
 
 /**
- * @version simpleSyntax.rng 1.0 (Sat Sep 07 19:36:09 JST 2002)
+ * @version simpleSyntax.rng 1.0 (Sat Oct 19 02:27:01 JST 2002)
  * @author  Relaxer 0.17b (http://www.relaxer.org)
  */
 public class RVisitorBase implements IRVisitor {
+
+    /**
+     * Visits this node for enter behavior.
+     *
+     * @param visitable
+     * @return boolean
+     */
+    public boolean enter(PatternData visitable) {
+        return (true);
+    }
+
+    /**
+     * Visits this node for leave behavior.
+     *
+     * @param visitable
+     */
+    public void leave(PatternData visitable) {
+    }
+
+    /**
+     * Visits this node for enter behavior.
+     *
+     * @param visitable
+     * @return boolean
+     */
+    public boolean enter(Param visitable) {
+        return (true);
+    }
+
+    /**
+     * Visits this node for leave behavior.
+     *
+     * @param visitable
+     */
+    public void leave(Param visitable) {
+    }
+
+    /**
+     * Visits this node for enter behavior.
+     *
+     * @param visitable
+     * @return boolean
+     */
+    public boolean enter(ExceptPattern visitable) {
+        return (true);
+    }
+
+    /**
+     * Visits this node for leave behavior.
+     *
+     * @param visitable
+     */
+    public void leave(ExceptPattern visitable) {
+    }
+
+    /**
+     * Visits this node for enter behavior.
+     *
+     * @param visitable
+     * @return boolean
+     */
+    public boolean enter(PatternAttribute visitable) {
+        return (true);
+    }
+
+    /**
+     * Visits this node for leave behavior.
+     *
+     * @param visitable
+     */
+    public void leave(PatternAttribute visitable) {
+    }
 
     /**
      * Visits this node for enter behavior.
@@ -94,78 +166,6 @@ public class RVisitorBase implements IRVisitor {
      * @param visitable
      */
     public void leave(NameClassName visitable) {
-    }
-
-    /**
-     * Visits this node for enter behavior.
-     *
-     * @param visitable
-     * @return boolean
-     */
-    public boolean enter(PatternData visitable) {
-        return (true);
-    }
-
-    /**
-     * Visits this node for leave behavior.
-     *
-     * @param visitable
-     */
-    public void leave(PatternData visitable) {
-    }
-
-    /**
-     * Visits this node for enter behavior.
-     *
-     * @param visitable
-     * @return boolean
-     */
-    public boolean enter(Param visitable) {
-        return (true);
-    }
-
-    /**
-     * Visits this node for leave behavior.
-     *
-     * @param visitable
-     */
-    public void leave(Param visitable) {
-    }
-
-    /**
-     * Visits this node for enter behavior.
-     *
-     * @param visitable
-     * @return boolean
-     */
-    public boolean enter(ExceptPattern visitable) {
-        return (true);
-    }
-
-    /**
-     * Visits this node for leave behavior.
-     *
-     * @param visitable
-     */
-    public void leave(ExceptPattern visitable) {
-    }
-
-    /**
-     * Visits this node for enter behavior.
-     *
-     * @param visitable
-     * @return boolean
-     */
-    public boolean enter(PatternAttribute visitable) {
-        return (true);
-    }
-
-    /**
-     * Visits this node for leave behavior.
-     *
-     * @param visitable
-     */
-    public void leave(PatternAttribute visitable) {
     }
 
     /**
@@ -462,7 +462,7 @@ public class RVisitorBase implements IRVisitor {
      * @param visitable
      * @return boolean
      */
-    public boolean enter(NameClass visitable) {
+    public boolean enter(NameClassID visitable) {
         return (true);
     }
 
@@ -471,7 +471,7 @@ public class RVisitorBase implements IRVisitor {
      *
      * @param visitable
      */
-    public void leave(NameClass visitable) {
+    public void leave(NameClassID visitable) {
     }
 
     /**
@@ -490,5 +490,23 @@ public class RVisitorBase implements IRVisitor {
      * @param visitable
      */
     public void leave(Pattern visitable) {
+    }
+
+    /**
+     * Visits this node for enter behavior.
+     *
+     * @param visitable
+     * @return boolean
+     */
+    public boolean enter(ExceptNameClassID visitable) {
+        return (true);
+    }
+
+    /**
+     * Visits this node for leave behavior.
+     *
+     * @param visitable
+     */
+    public void leave(ExceptNameClassID visitable) {
     }
 }

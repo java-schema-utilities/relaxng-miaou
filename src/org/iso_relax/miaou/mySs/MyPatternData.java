@@ -56,6 +56,7 @@ public class MyPatternData extends PatternData
     PatternData copy = SimpleSyntaxFactory.getFactory().createPatternData();
     copy.setType(getType());
     copy.setDatatypeLibrary(getDatatypeLibrary());
+    copy.setSyntaxExtensionDatatypeLibraryID(getSyntaxExtensionDatatypeLibraryID());
 
     if (getExceptPattern() != null) {
       ExceptPattern exceptPattern =
@@ -77,7 +78,7 @@ public class MyPatternData extends PatternData
     org.iso_relax.miaou.btg.Data copy = factory.createData();
 
     copy.setType(getType());
-    copy.setDatatypeLibrary(getDatatypeLibrary());
+    copy.setDatatypeLibrary(this.getSyntaxExtensionDatatypeLibraryID());
 
     for (int i = 0; i < getParamCount(); i++) {
       copy.addParam(((MyParam)getParam(i)).convert());

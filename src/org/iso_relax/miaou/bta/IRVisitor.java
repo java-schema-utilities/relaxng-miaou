@@ -1,7 +1,7 @@
 package org.iso_relax.miaou.bta;
 
 /**
- * @version binaryTreeAutomaton.rng 1.0 (Sat Sep 07 19:30:30 JST 2002)
+ * @version binaryTreeAutomaton.rng 1.0 (Sat Oct 19 02:26:43 JST 2002)
  * @author  Relaxer 0.17b (http://www.relaxer.org)
  */
 public interface IRVisitor {
@@ -64,81 +64,6 @@ public interface IRVisitor {
      * @param visitable
      */
     void leave(ElementTransition visitable);
-
-    /**
-     * Visits this node for enter behavior.
-     *
-     * @param visitable
-     * @return boolean
-     */
-    boolean enter(NameClassNsName visitable);
-
-    /**
-     * Visits this node for leave behavior.
-     *
-     * @param visitable
-     */
-    void leave(NameClassNsName visitable);
-
-    /**
-     * Visits this node for enter behavior.
-     *
-     * @param visitable
-     * @return boolean
-     */
-    boolean enter(ExceptNameClass visitable);
-
-    /**
-     * Visits this node for leave behavior.
-     *
-     * @param visitable
-     */
-    void leave(ExceptNameClass visitable);
-
-    /**
-     * Visits this node for enter behavior.
-     *
-     * @param visitable
-     * @return boolean
-     */
-    boolean enter(NameClassChoice visitable);
-
-    /**
-     * Visits this node for leave behavior.
-     *
-     * @param visitable
-     */
-    void leave(NameClassChoice visitable);
-
-    /**
-     * Visits this node for enter behavior.
-     *
-     * @param visitable
-     * @return boolean
-     */
-    boolean enter(NameClassAnyName visitable);
-
-    /**
-     * Visits this node for leave behavior.
-     *
-     * @param visitable
-     */
-    void leave(NameClassAnyName visitable);
-
-    /**
-     * Visits this node for enter behavior.
-     *
-     * @param visitable
-     * @return boolean
-     */
-    boolean enter(NameClassName visitable);
-
-    /**
-     * Visits this node for leave behavior.
-     *
-     * @param visitable
-     */
-    void leave(NameClassName visitable);
 
     /**
      * Visits this node for enter behavior.

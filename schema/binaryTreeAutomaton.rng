@@ -197,21 +197,31 @@
       <data type="string"/>
     </element>
   </define>
-  <!-- include "common.rnc" -->
-  <define name="type">
-    <a:documentation>The rest is directly borrowed from simpleSyntax.rnc.</a:documentation>
-    <attribute name="type">
-      <data type="NCName"/>
+  <define name="nameClass">
+    <a:documentation/>
+    <attribute name="nameClass">
+      <data type="int"/>
+    </attribute>
+  </define>
+  <define name="exceptNameClass">
+    <attribute name="exceptNameClass">
+      <data type="int"/>
     </attribute>
   </define>
   <define name="datatypeLibrary">
     <attribute name="datatypeLibrary">
-      <data type="anyURI"/>
+      <data type="int"/>
     </attribute>
   </define>
   <define name="ns">
     <attribute name="ns">
-      <data type="string"/>
+      <data type="int"/>
+    </attribute>
+  </define>
+  <define name="type">
+    <a:documentation>The rest is directly borrowed from simpleSyntax.rnc.</a:documentation>
+    <attribute name="type">
+      <data type="NCName"/>
     </attribute>
   </define>
   <define name="param">
@@ -220,34 +230,6 @@
         <data type="NCName"/>
       </attribute>
       <data type="string"/>
-    </element>
-  </define>
-  <define name="nameClass">
-    <choice>
-      <element name="anyName">
-        <optional>
-          <ref name="exceptNameClass"/>
-        </optional>
-      </element>
-      <element name="nsName">
-        <ref name="ns"/>
-        <optional>
-          <ref name="exceptNameClass"/>
-        </optional>
-      </element>
-      <element name="name">
-        <ref name="ns"/>
-        <data type="NCName"/>
-      </element>
-      <element name="choice">
-        <ref name="nameClass"/>
-        <ref name="nameClass"/>
-      </element>
-    </choice>
-  </define>
-  <define name="exceptNameClass">
-    <element name="except">
-      <ref name="nameClass"/>
     </element>
   </define>
 </grammar>

@@ -6,6 +6,7 @@ import org.iso_relax.miaou.ss.INameClassChoice;
 import org.iso_relax.miaou.ss.SimpleSyntaxFactory;
 
 import org.iso_relax.miaou.btg.BinaryTreeGrammarFactory;
+import org.iso_relax.miaou.houseKeeping.SymbolTables;
 
 /**
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
@@ -54,13 +55,13 @@ public class MyNameClassAnyName
     return copy;
   }
 
-  public org.iso_relax.miaou.btg.INameClassChoice convert() {
-    org.iso_relax.miaou.btg.NameClassAnyName copy =
-      BinaryTreeGrammarFactory.getFactory().createNameClassAnyName();
-      if (getExceptNameClass() != null) {
-        MyExceptNameClass except = (MyExceptNameClass)getExceptNameClass();
-        copy.setExceptNameClass(except.convert());
-      }
-    return copy;
+  public int getID(SymbolTables symbolTables) {
+    int except = symbolTables.NON_EXISTENT_INDEX;
+    if (this.getExceptNameClass() != null) {
+      IMyNameClassChoice exceptNameClass =
+	(IMyNameClassChoice)getExceptNameClass().getNameClass();
+      except = exceptNameClass.getID(symbolTables);
+    }
+    return symbolTables.getNameClassIdForAnyName(except);
   }
 }

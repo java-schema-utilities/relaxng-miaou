@@ -4,6 +4,7 @@ import org.iso_relax.miaou.ss.NameClassChoice;
 import org.iso_relax.miaou.ss.INameClassChoice;
 import org.iso_relax.miaou.ss.SimpleSyntaxFactory;
 import org.iso_relax.miaou.btg.BinaryTreeGrammarFactory;
+import org.iso_relax.miaou.houseKeeping.SymbolTables;
 
 /**
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
@@ -51,11 +52,9 @@ public class MyNameClassChoice
     return copy;
   }
 
-  public org.iso_relax.miaou.btg.INameClassChoice convert() {
-    org.iso_relax.miaou.btg.NameClassChoice copy =
-      BinaryTreeGrammarFactory.getFactory().createNameClassChoice();
-    copy.setNameClass1(((IMyNameClassChoice)getNameClass1()).convert());
-    copy.setNameClass2(((IMyNameClassChoice)getNameClass2()).convert());
-    return copy;
+  public int getID(SymbolTables symbolTables) {
+    int first = ((IMyNameClassChoice)getNameClass1()).getID(symbolTables);
+    int second = ((IMyNameClassChoice)getNameClass2()).getID(symbolTables);
+    return symbolTables.getNameClassIdForChoice(first, second);
   }
 }

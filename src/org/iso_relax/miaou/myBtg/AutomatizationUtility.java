@@ -4,6 +4,7 @@ import org.iso_relax.miaou.abstractBta.*;
 import org.iso_relax.miaou.btg.Data;
 import org.iso_relax.miaou.btg.Value;
 import org.iso_relax.miaou.btg.IBtrExpAtomicChoice1;
+import org.iso_relax.miaou.houseKeeping.SymbolTables;
 
 /**
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
@@ -71,14 +72,14 @@ class AutomatizationUtility {
     int left,
     int right,
     int target,
-    IMyNameClassChoice nameClass) {
+    int nameClass) {
 
     AbstractElementTransition aet =
       (AbstractElementTransition)factory.createElementTransition();
     aet.setTarget(target);
     aet.setRight(right);
     aet.setLeft(left);
-    aet.setNameClass(nameClass.convert());
+    aet.setNameClass(nameClass);
     return aet;
   }
 
@@ -122,7 +123,7 @@ class AutomatizationUtility {
     int left,
     int right,
     int target,
-    IMyNameClassChoice nameClass) {
+    int nameClass) {
 
 
     AbstractOneOrMoreAttributeTransition oomat =
@@ -130,23 +131,22 @@ class AutomatizationUtility {
     oomat.setLeft(left);
     oomat.setRight(right);
     oomat.setTarget(target);
-    oomat.setNameClass(nameClass.convert());
+    oomat.setNameClass(nameClass);
     return oomat;
   }
 
   public AbstractNonExistentAttributeTransition createNonExistentAttributeTransition(
     int right,
     int target,
-    IMyNameClassChoice nameClass,
-    MyExceptNameClass exceptNameClass) {
+    int nameClass,
+    int exceptNameClass) {
 
     AbstractNonExistentAttributeTransition neat =
       (AbstractNonExistentAttributeTransition)factory.createNonExistentAttributeTransition();
     neat.setRight(right);
     neat.setTarget(target);
-    neat.setNameClass(nameClass.convert());
-    if (exceptNameClass != null)
-      neat.setExceptNameClass(exceptNameClass.convert());
+    neat.setNameClass(nameClass);
+    neat.setExceptNameClass(exceptNameClass);
     return neat;
   }
 

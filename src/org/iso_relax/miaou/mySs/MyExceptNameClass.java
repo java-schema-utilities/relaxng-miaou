@@ -27,10 +27,4 @@ public class MyExceptNameClass extends ExceptNameClass implements Cloneable {
     return (MyExceptNameClass)copy;
   }
 
-  public org.iso_relax.miaou.btg.ExceptNameClass convert() {
-    org.iso_relax.miaou.btg.ExceptNameClass copy =
-      BinaryTreeGrammarFactory.getFactory().createExceptNameClass();
-    copy.setNameClass(((IMyNameClassChoice)getNameClass()).convert());
-    return copy;
-  }
 }

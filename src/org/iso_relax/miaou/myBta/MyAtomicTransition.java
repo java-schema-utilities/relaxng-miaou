@@ -2,10 +2,13 @@ package org.iso_relax.miaou.myBta;
 
 import java.util.ArrayList;
 import java.io.PrintWriter;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import org.iso_relax.miaou.abstractBta.AbstractAtomicTransition;
 import org.iso_relax.miaou.abstractBta.IDataOrValue;
 import org.iso_relax.miaou.bta.Value;
 import org.iso_relax.miaou.bta.Data;
+import org.iso_relax.miaou.houseKeeping.BinaryPrinter;
 
 /**
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
@@ -29,6 +32,22 @@ public class MyAtomicTransition extends AbstractAtomicTransition
     writer.print(" ");
     ((IDataOrValue)getContent()).compactPrint(writer);
     writer.println();
+  }
+
+  public void binPrint(DataOutputStream dos) throws IOException {
+    if (getContent() instanceof Value) {
+      dos.writeByte(BinaryPrinter.VALUE_TRANSITION);
+    }
+    else if (getContent() instanceof Data) {
+      dos.writeByte(BinaryPrinter.DATA_TRANSITION);
+    }
+    else {
+      System.err.println("Illegal atomic transition");
+      System.exit(-1);
+    }
+    dos.writeShort(getRight());
+    dos.writeShort(getTarget());
+    ((IDataOrValue)getContent()).binPrint(dos);
   }
 
   public int getSecondTarget() {

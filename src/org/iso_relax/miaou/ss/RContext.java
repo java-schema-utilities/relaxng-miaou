@@ -1,7 +1,7 @@
 package org.iso_relax.miaou.ss;
 
 /**
- * @version simpleSyntax.rng 1.0 (Sat Sep 07 19:36:08 JST 2002)
+ * @version simpleSyntax.rng 1.0 (Sat Oct 19 02:27:01 JST 2002)
  * @author  Relaxer 0.17b (http://www.relaxer.org)
  */
 public class RContext {

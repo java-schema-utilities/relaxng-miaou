@@ -2,6 +2,8 @@ package org.iso_relax.miaou.abstractBta;
 
 import org.iso_relax.miaou.bta.BinaryTreeAutomaton;
 import java.io.PrintWriter;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
@@ -16,6 +18,12 @@ public abstract class AbstractBinaryTreeAutomaton extends BinaryTreeAutomaton {
    * Print a compact textual representation.
    */
   abstract public void compactPrint(PrintWriter writer);
+
+  /**
+   * Print a binary representation.
+   */
+
+  abstract public void binPrint (DataOutputStream dos) throws IOException;
 
     /**
      * Compute the maximum state.

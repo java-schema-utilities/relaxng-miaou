@@ -3,6 +3,8 @@ package org.iso_relax.miaou.myBta;
 import org.iso_relax.miaou.abstractBta.*;
 import java.util.ArrayList;
 import java.io.PrintWriter;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
@@ -17,12 +19,16 @@ public class MyListTransition extends AbstractListTransition {
    * @param writer
    */
   public void compactPrint(PrintWriter writer) {
-    writer.print("lt ");
+    writer.print("lt l:");
     writer.print(getLeft());
-    writer.print(" ");
+    writer.print(" r:");
     writer.print(getRight());
     writer.print(" ");
     writer.println(getTarget());
+  }
+
+  public void binPrint(DataOutputStream dos) throws IOException {
+    //not yet
   }
 
   public int getSecondTarget() {

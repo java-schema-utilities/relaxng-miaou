@@ -2,6 +2,8 @@ package org.iso_relax.miaou.myBta;
 
 import java.io.PrintWriter;
 import org.iso_relax.miaou.abstractBta.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
@@ -35,5 +37,12 @@ public class MyData extends AbstractData {
       }
       writer.print(")");
     }
+  }
+
+  public void binPrint(DataOutputStream dos) throws IOException {
+    dos.writeShort(getDatatypeLibrary());
+    dos.writeUTF(getType());
+//  we also have to support parameters and exceptions (data and value).
+//  Well, this is still a research prototype.
   }
 }

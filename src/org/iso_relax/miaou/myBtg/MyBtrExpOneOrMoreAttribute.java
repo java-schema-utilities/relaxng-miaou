@@ -13,10 +13,6 @@ import java.util.Hashtable;
 public class MyBtrExpOneOrMoreAttribute extends BtrExpOneOrMoreAttribute
   implements AbstractBtrExp {
 
-  public IMyNameClassChoice getMyNameClass() {
-    return (IMyNameClassChoice)getNameClass();
-  }
-
   public AbstractBinaryTreeAutomaton automatize(Hashtable patternNameNumbers) {
 
     AutomatizationUtility utility = AutomatizationUtility.singleInstance();
@@ -33,7 +29,7 @@ public class MyBtrExpOneOrMoreAttribute extends BtrExpOneOrMoreAttribute
                 AutomatizationUtility.DUMMYLEFT,
                 AutomatizationUtility.DUMMYRIGHT,
                 AutomatizationUtility.NEW1,
-                getMyNameClass()));
+                getNameClass()));
     btaTemp.addFinalTransition(utility.createFinalTransition(AutomatizationUtility.NEW1));
 
     int leftMax = btaLeft.maxState();

@@ -39,23 +39,14 @@ Data =
 Value =
   element Value {type, datatypeLibrary, ns, xsd:string}
 
-#include "common.rnc"
+##
+
+nameClass = attribute nameClass {xsd:int}
+exceptNameClass = attribute exceptNameClass {xsd:int}
+datatypeLibrary = attribute datatypeLibrary {xsd:int}
+ns = attribute ns { xsd:int }
 
 ##The rest is directly borrowed from simpleSyntax.rnc.
 
 type = attribute type { xsd:NCName }
-datatypeLibrary = attribute datatypeLibrary { xsd:anyURI}
-ns = attribute ns { xsd:string }
-
 param = element param {attribute name { xsd:NCName }, xsd:string }
-
-nameClass = 
-  element anyName {exceptNameClass?} |
-  element nsName {ns, exceptNameClass? } |
-  element name {ns, xsd:NCName } |
-  element choice {nameClass, nameClass}
-
-exceptNameClass = element except {nameClass}
-
-
-

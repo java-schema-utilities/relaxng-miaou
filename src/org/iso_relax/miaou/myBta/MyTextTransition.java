@@ -1,8 +1,11 @@
 package org.iso_relax.miaou.myBta;
 
 import org.iso_relax.miaou.abstractBta.*;
+import org.iso_relax.miaou.houseKeeping.BinaryPrinter;
 import java.util.ArrayList;
 import java.io.PrintWriter;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
@@ -20,10 +23,16 @@ public class MyTextTransition
    * @param writer
    */
   public void compactPrint(PrintWriter writer) {
-    writer.print("tt ");
+    writer.print("tt right:");
     writer.print(getRight());
-    writer.print(" ");
+    writer.print(" target:");
     writer.println(getTarget());
+  }
+
+  public void binPrint(DataOutputStream dos) throws IOException {
+    dos.writeByte(BinaryPrinter.TEXT_TRANSITION);
+    dos.writeShort(getRight());
+    dos.writeShort(getTarget());
   }
 
   public void setSecondTarget(int parm1) {

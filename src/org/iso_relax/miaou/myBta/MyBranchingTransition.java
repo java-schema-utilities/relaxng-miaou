@@ -3,6 +3,8 @@ package org.iso_relax.miaou.myBta;
 import org.iso_relax.miaou.abstractBta.*;
 import java.util.ArrayList;
 import java.io.PrintWriter;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
@@ -23,6 +25,10 @@ public class MyBranchingTransition extends AbstractBranchingTransition {
     writer.print(getFirstTarget());
     writer.print(" ");
     writer.println(getSecondTarget());
+  }
+
+  public void binPrint(DataOutputStream dos) throws IOException {
+    //not yet
   }
 
   public int getSecondSource() {

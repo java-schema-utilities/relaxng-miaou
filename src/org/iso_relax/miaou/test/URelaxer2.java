@@ -19,7 +19,7 @@ import org.w3c.dom.*;
  * This class can be executed on the DOM2 parser.
  *
  * @since   Sep.  3, 2000
- * @version Aug. 11, 2002
+ * @version Oct.  8, 2002
  * @author  ASAMI, Tomoharu (asami@relaxer.org)
  */
 public final class URelaxer2 {
@@ -3011,7 +3011,7 @@ public final class URelaxer2 {
     }
 
     public static URL makeURL(String name) {
-	return (URelaxer.makeURL(name));
+	return (URelaxer.makeURL4Property(name));
     }
 
     public static java.sql.Timestamp makeSQLTimestamp(String name) {

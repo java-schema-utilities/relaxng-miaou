@@ -1,8 +1,11 @@
 package org.iso_relax.miaou.myBta;
 
 import org.iso_relax.miaou.abstractBta.*;
+import org.iso_relax.miaou.houseKeeping.BinaryPrinter;
 import java.util.ArrayList;
 import java.io.PrintWriter;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
@@ -19,6 +22,11 @@ public class MyStartTransition extends AbstractStartTransition {
   public void compactPrint(PrintWriter writer) {
     writer.print("ss ");
     writer.println(getState());
+  }
+
+  public void binPrint(DataOutputStream dos) throws IOException {
+    dos.writeByte(BinaryPrinter.START_STATE);
+    dos.writeShort(getState());
   }
 
   public void setSecondTarget(int parm1) { }

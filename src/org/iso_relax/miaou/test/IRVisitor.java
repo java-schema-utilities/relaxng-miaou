@@ -1,7 +1,7 @@
 package org.iso_relax.miaou.test;
 
 /**
- * @version testData.rng 1.0 (Sat Sep 07 22:04:57 JST 2002)
+ * @version testData.rng 1.0 (Sat Oct 19 02:27:05 JST 2002)
  * @author  Relaxer 0.17b (http://www.relaxer.org)
  */
 public interface IRVisitor {

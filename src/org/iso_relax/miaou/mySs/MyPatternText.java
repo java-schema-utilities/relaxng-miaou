@@ -22,10 +22,10 @@ public class MyPatternText extends PatternText
     BtrExpText text =  factory.createBtrExpText();
     BtrExpVariable var =  factory.createBtrExpVariable();
 
+    text.setBtrExp(factory.createBtrExpVariable());
+    oneOrMore.setBtrExp(text);
     choice.setBtrExp1(oneOrMore);
     choice.setBtrExp2(factory.createBtrExpVariable());
-    oneOrMore.setBtrExp(text);
-    text.setBtrExp(factory.createBtrExpVariable());
 
     return choice;
   }

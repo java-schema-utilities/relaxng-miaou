@@ -14,42 +14,32 @@ import org.iso_relax.miaou.btg.*;
 public class MyPatternAttribute extends PatternAttribute
   implements IMyPatternChoice, Cloneable {
 
-    public IMyNameClassChoice getMyNameClass() {
-        return (IMyNameClassChoice)getNameClass();
-    }
-
-    public IBtrExpChoice binarize(java.util.Hashtable defineHash) {
+  public IBtrExpChoice binarize(java.util.Hashtable defineHash) {
       System.err.println("Normalization should remove all <attribute/>!");
       return null;
   }
-    /*
-  public IMyPatternChoice deepCopy() {
-    try {
-      return (IMyPatternChoice)
-              SimpleSyntaxFactory.getFactory().createPatternAttribute(makeDocument());
-    }
-    catch (javax.xml.parsers.ParserConfigurationException pce) {
-      pce.printStackTrace();
-      return null;
-    }
+
+  public IPatternChoice deepCopy() {
+    MyPatternAttribute copy =  new MyPatternAttribute();
+    copy.setSyntaxExtensionNc(getSyntaxExtensionNc());
+    copy.setPattern(((IMyPatternChoice)getPattern()).deepCopy());
+    copy.setSyntaxExtensionNc(getSyntaxExtensionNc());
+    return copy;
   }
-     */
+
 
   public Object clone() throws CloneNotSupportedException {
     PatternAttribute copy = (PatternAttribute)super.clone();
-    org.iso_relax.miaou.ss.INameClassChoice copiedNameClass =
-      (org.iso_relax.miaou.ss.INameClassChoice)((IMyNameClassChoice)getNameClass()).clone();
-    copy.setNameClass(copiedNameClass);
     IPatternChoice copiedPattern =
       (IPatternChoice)((IMyPatternChoice)getPattern()).clone();
     copy.setPattern(copiedPattern);
     return copy;
   }
-
+/*
   public IPatternChoice deepCopy() {
     PatternAttribute copy = SimpleSyntaxFactory.getFactory().createPatternAttribute();
-    copy.setNameClass(((IMyNameClassChoice)getNameClass()).deepCopy());
     copy.setPattern(((IMyPatternChoice)getPattern()).deepCopy());
     return copy;
   }
+  */
 }

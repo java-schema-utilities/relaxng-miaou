@@ -17,7 +17,12 @@
         <data type="ID"/>
       </attribute>
       <element name="element">
-        <ref name="nameClass"/>
+        <optional>
+          <ref name="nameClass"/>
+        </optional>
+        <optional>
+          <ref name="nameClassID"/>
+        </optional>
         <ref name="pattern"/>
       </element>
     </element>
@@ -35,7 +40,12 @@
       </element>
       <element name="data">
         <ref name="type"/>
-        <ref name="datatypeLibrary"/>
+        <optional>
+          <ref name="datatypeLibrary"/>
+        </optional>
+        <optional>
+          <ref name="datatypeLibraryID"/>
+        </optional>
         <zeroOrMore>
           <ref name="param"/>
         </zeroOrMore>
@@ -45,30 +55,43 @@
       </element>
       <element name="value">
         <ref name="type"/>
-        <ref name="datatypeLibrary"/>
-        <ref name="ns"/>
+        <optional>
+          <ref name="datatypeLibrary"/>
+        </optional>
+        <optional>
+          <ref name="datatypeLibraryID"/>
+        </optional>
+        <optional>
+          <ref name="ns"/>
+        </optional>
+        <optional>
+          <ref name="nsID"/>
+        </optional>
         <data type="string"/>
       </element>
       <element name="list">
         <ref name="pattern"/>
       </element>
       <element name="attribute">
-        <ref name="nameClass"/>
+        <optional>
+          <ref name="nameClass"/>
+        </optional>
+        <optional>
+          <ref name="nameClassID"/>
+        </optional>
         <ref name="pattern"/>
       </element>
       <element name="syntaxExtension:oneOrMoreAttribute">
-        <ref name="nameClass"/>
+        <ref name="nameClassID"/>
         <ref name="pattern"/>
       </element>
       <element name="syntaxExtension:nonExistentAttribute">
-        <ref name="nameClass"/>
-        <optional>
-          <ref name="exceptNameClass"/>
-        </optional>
+        <ref name="nameClassID"/>
+        <ref name="exceptNameClassID"/>
       </element>
       <element name="ref">
         <attribute name="name">
-          <data type="IDREF"/>
+          <data type="ID"/>
         </attribute>
       </element>
       <element name="oneOrMore">
@@ -93,13 +116,8 @@
       <ref name="pattern"/>
     </element>
   </define>
-  <define name="type">
-    <a:documentation>include "common.rnc"</a:documentation>
-    <attribute name="type">
-      <data type="NCName"/>
-    </attribute>
-  </define>
   <define name="datatypeLibrary">
+    <a:documentation/>
     <attribute name="datatypeLibrary">
       <data type="anyURI"/>
     </attribute>
@@ -108,14 +126,6 @@
     <attribute name="ns">
       <data type="string"/>
     </attribute>
-  </define>
-  <define name="param">
-    <element name="param">
-      <attribute name="name">
-        <data type="NCName"/>
-      </attribute>
-      <data type="string"/>
-    </element>
   </define>
   <define name="nameClass">
     <choice>
@@ -143,6 +153,41 @@
   <define name="exceptNameClass">
     <element name="except">
       <ref name="nameClass"/>
+    </element>
+  </define>
+  <define name="nameClassID">
+    <a:documentation/>
+    <attribute name="syntaxExtension:nc">
+      <data type="int"/>
+    </attribute>
+  </define>
+  <define name="exceptNameClassID">
+    <attribute name="syntaxExtension:exceptNc">
+      <data type="int"/>
+    </attribute>
+  </define>
+  <define name="datatypeLibraryID">
+    <attribute name="syntaxExtension:datatypeLibraryID">
+      <data type="int"/>
+    </attribute>
+  </define>
+  <define name="nsID">
+    <attribute name="syntaxExtension:nsID">
+      <data type="int"/>
+    </attribute>
+  </define>
+  <define name="type">
+    <a:documentation/>
+    <attribute name="type">
+      <data type="NCName"/>
+    </attribute>
+  </define>
+  <define name="param">
+    <element name="param">
+      <attribute name="name">
+        <data type="NCName"/>
+      </attribute>
+      <data type="string"/>
     </element>
   </define>
 </grammar>

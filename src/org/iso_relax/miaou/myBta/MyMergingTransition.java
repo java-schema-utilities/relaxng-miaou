@@ -3,6 +3,8 @@ package org.iso_relax.miaou.myBta;
 import org.iso_relax.miaou.abstractBta.*;
 import java.util.ArrayList;
 import java.io.PrintWriter;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
@@ -17,12 +19,16 @@ public class MyMergingTransition extends AbstractMergingTransition {
    * @param writer
    */
   public void compactPrint(PrintWriter writer) {
-    writer.print("mt ");
+    writer.print("mt first:");
     writer.print(getFirstSource());
-    writer.print(" ");
+    writer.print(" second:");
     writer.print(getSecondSource());
-    writer.print(" ");
+    writer.print(" target:");
     writer.println(getTarget());
+  }
+
+  public void binPrint(DataOutputStream dos) throws IOException {
+    //not yet
   }
 
   public int getSecondTarget() {

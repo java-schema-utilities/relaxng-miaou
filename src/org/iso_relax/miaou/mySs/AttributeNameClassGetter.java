@@ -1,6 +1,7 @@
 package org.iso_relax.miaou.mySs;
 
 import org.iso_relax.miaou.ss.*;
+import org.iso_relax.miaou.houseKeeping.SymbolTables;
 
 /**
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
@@ -10,25 +11,25 @@ import org.iso_relax.miaou.ss.*;
 
 class AttributeNameClassGetter extends RVisitorBase {
 
-  private INameClassChoice nc;
+  private int nc = SymbolTables.NON_EXISTENT_INDEX;
+  SymbolTables symbolTables;
+
+  AttributeNameClassGetter(SymbolTables symbolTables) {
+    this.symbolTables = symbolTables;
+  }
 
   public boolean enter(PatternOneOrMoreAttribute oneOrMoreAttribute) {
-    INameClassChoice newNc =
-      ((org.iso_relax.miaou.mySs.IMyNameClassChoice)oneOrMoreAttribute.getNameClass()).deepCopy();
-    if (nc == null) {
+    int newNc = oneOrMoreAttribute.getSyntaxExtensionNc();
+    if (nc == SymbolTables.NON_EXISTENT_INDEX) {
       nc = newNc;
     }
     else {
-      NameClassChoice choice =
-        SimpleSyntaxFactory.getFactory().createNameClassChoice();
-      choice.setNameClass1(nc);
-      choice.setNameClass2(newNc);
-      nc = choice;
+      nc = symbolTables.getNameClassIdForChoice(nc, newNc);
     }
     return false;
   }
 
-  public INameClassChoice getNameClass() {
+  public int getNameClassID() {
     return nc;
   }
 }

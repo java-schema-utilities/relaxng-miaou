@@ -36,7 +36,7 @@ public class MyPatternRef extends PatternRef
     BtrExpElement elem = factory.createBtrExpElement();
     BtrExpRef ref = factory.createBtrExpRef();
 
-    elem.setNameClass(((MyDefineElement)define.getDefineElement()).getMyNameClass().convert());
+    elem.setNameClass(((MyDefineElement)define.getDefineElement()).getSyntaxExtensionNc());
     elem.setBtrExp1(ref);
     ref.setName(getName());
     elem.setBtrExp2(factory.createBtrExpVariable());

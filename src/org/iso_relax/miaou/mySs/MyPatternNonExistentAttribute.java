@@ -14,17 +14,13 @@ import org.iso_relax.miaou.btg.*;
 public class MyPatternNonExistentAttribute extends PatternNonExistentAttribute
   implements IMyPatternChoice, Cloneable {
 
-  public IMyNameClassChoice getMyNameClass() {
-    return (IMyNameClassChoice)getNameClass();
-  }
 
   public IBtrExpChoice binarize(java.util.Hashtable defineHash) {
 
     BtrExpNonExistentAttribute nea =
       BinaryTreeGrammarFactory.getFactory().createBtrExpNonExistentAttribute();
-    nea.setNameClass(getMyNameClass().convert());
-    if (getExceptNameClass() != null)
-      nea.setExceptNameClass(((MyExceptNameClass)getExceptNameClass()).convert());
+    nea.setNameClass(this.getSyntaxExtensionNc());
+    nea.setExceptNameClass(this.getSyntaxExtensionExceptNc());
     nea.setBtrExp(BinaryTreeGrammarFactory.getFactory().createBtrExpVariable());
     return nea;
   }
@@ -44,23 +40,14 @@ public class MyPatternNonExistentAttribute extends PatternNonExistentAttribute
 
   public Object clone() throws CloneNotSupportedException {
     PatternNonExistentAttribute copy = (PatternNonExistentAttribute)super.clone();
-    IMyNameClassChoice origNameclass = getMyNameClass();
-    copy.setNameClass((IMyNameClassChoice)origNameclass.clone());
-    if (getExceptNameClass() != null) {
-      MyExceptNameClass origExceptNameClass =
-        (MyExceptNameClass)getExceptNameClass();
-      MyExceptNameClass copiedExceptNameClass =
-        (MyExceptNameClass)origExceptNameClass.clone();
-      copy.setExceptNameClass(copiedExceptNameClass);
-    }
     return copy;
   }
+
   public IPatternChoice deepCopy() {
     PatternNonExistentAttribute copy =
       SimpleSyntaxFactory.getFactory().createPatternNonExistentAttribute();
-    copy.setNameClass(((IMyNameClassChoice)getNameClass()).deepCopy());
-    if (getExceptNameClass() != null)
-      copy.setExceptNameClass(((MyExceptNameClass)getExceptNameClass()).deepCopy());
+    copy.setSyntaxExtensionNc(getSyntaxExtensionNc());
+    copy.setSyntaxExtensionExceptNc(getSyntaxExtensionExceptNc());
     return copy;
   }
 }

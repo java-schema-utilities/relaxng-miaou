@@ -23,7 +23,7 @@ public class MyPatternOneOrMoreAttribute
       factory.createBtrExpOneOrMoreAttribute();
     BtrExpProduct product = factory.createBtrExpProduct();
 
-    oneOrMoreAttr.setNameClass(((IMyNameClassChoice)getNameClass()).convert());
+    oneOrMoreAttr.setNameClass(getSyntaxExtensionNc());
     oneOrMoreAttr.setBtrExp1(product);
     oneOrMoreAttr.setBtrExp2(factory.createBtrExpVariable());
 
@@ -35,10 +35,6 @@ public class MyPatternOneOrMoreAttribute
 
   public Object clone() throws CloneNotSupportedException {
     PatternOneOrMoreAttribute copy = (PatternOneOrMoreAttribute)super.clone();
-    IMyNameClassChoice origNameClass = (IMyNameClassChoice)getNameClass();
-    org.iso_relax.miaou.ss.INameClassChoice copiedNameClass =
-      (org.iso_relax.miaou.ss.INameClassChoice)origNameClass.clone();
-    copy.setNameClass(copiedNameClass);
     IMyPatternChoice origPattern = (IMyPatternChoice)getPattern();
     org.iso_relax.miaou.ss.IPatternChoice copiedPattern =
       (org.iso_relax.miaou.ss.IPatternChoice)origPattern.clone();
@@ -49,8 +45,8 @@ public class MyPatternOneOrMoreAttribute
   public IPatternChoice deepCopy() {
     PatternOneOrMoreAttribute copy =
       SimpleSyntaxFactory.getFactory().createPatternOneOrMoreAttribute();
-    copy.setNameClass(((IMyNameClassChoice)getNameClass()).deepCopy());
     copy.setPattern(((IMyPatternChoice)getPattern()).deepCopy());
+    copy.setSyntaxExtensionNc(getSyntaxExtensionNc());
     return copy;;
   }
 }

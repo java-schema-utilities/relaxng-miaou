@@ -1,8 +1,12 @@
 package org.iso_relax.miaou.myBta;
 
 import org.iso_relax.miaou.abstractBta.*;
+import org.iso_relax.miaou.houseKeeping.SymbolTables;
+import org.iso_relax.miaou.houseKeeping.BinaryPrinter;
 import java.util.ArrayList;
 import java.io.PrintWriter;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
@@ -17,18 +21,26 @@ public class MyNonExistentAttributeTransition extends AbstractNonExistentAttribu
    * @param writer
    */
   public void compactPrint(PrintWriter writer) {
-    writer.print("nt ");
+    writer.print("nonExisAtt right:");
     writer.print(getRight());
-    writer.print(" ");
+    writer.print(" target:");
     writer.print(getTarget());
-    writer.print(" ");
-    ((IAbstractNameClassChoice)getNameClass()).compactPrint(writer);
-    if (getExceptNameClass() != null) {
+    writer.print(" nc:");
+    writer.print(getNameClass());
+    if (getExceptNameClass() != SymbolTables.NON_EXISTENT_INDEX) {
       writer.print(" - (");
-      ((AbstractExceptNameClass)getExceptNameClass()).compactPrint(writer);
+      writer.print(getExceptNameClass());
       writer.print(")");
     }
     writer.println();
+  }
+
+  public void binPrint(DataOutputStream dos) throws IOException {
+    dos.writeByte(BinaryPrinter.NON_EXISTENT_ATTRIBUTE_TRANSITION);
+    dos.writeShort(getRight());
+    dos.writeShort(getTarget());
+    dos.writeShort(getNameClass());
+    dos.writeShort(getExceptNameClass());
   }
 
   public void setSecondTarget(int parm1) { }

@@ -5,6 +5,7 @@ import org.iso_relax.miaou.mySs.*;
 import org.iso_relax.miaou.myBta.*;
 import org.iso_relax.miaou.myBtg.*;
 import org.iso_relax.miaou.test.*;
+import org.iso_relax.miaou.houseKeeping.SymbolTables;
 import org.xml.sax.InputSource;
 import com.thaiopensource.relaxng.util.ErrorHandlerImpl;
 import org.kohsuke.rng2srng.Translator;
@@ -28,6 +29,7 @@ public class TestDriver {
 
   org.iso_relax.miaou.mySs.MyRootGrammar mrg;
   org.iso_relax.miaou.myBtg.MyBinaryTreeGrammar btg;
+  SymbolTables symbolTables;
   String rncName;
   String rngName;
   String ssName;
@@ -123,7 +125,7 @@ public class TestDriver {
   }
 
   private void readRng () throws Exception {
-    URL grammar = new File(rncName).toURL();
+    URL grammar = new File(rngName).toURL();
     Node docNode = Translator.translateXMLToDOM(
 		        new InputSource(grammar.toExternalForm()),
 		        new ErrorHandlerImpl());
@@ -166,7 +168,10 @@ public class TestDriver {
 
   private void convertFromSs2Nss() throws Exception {
 
-    AttributeNormalizer attributeNormalizer = new AttributeNormalizer();
+    symbolTables = new SymbolTables ();
+    org.iso_relax.miaou.ss.URVisitor.traverse(mrg, symbolTables);
+
+    AttributeNormalizer attributeNormalizer = new AttributeNormalizer(symbolTables);
     attributeNormalizer.normalize(mrg);
     InterleaveNormalizer interleaveNormalizer = new InterleaveNormalizer();
     interleaveNormalizer.simplify(mrg);
@@ -192,6 +197,6 @@ public class TestDriver {
     if (btaName != null)
       Printer.singleInstance().print(bta, new java.io.FileOutputStream(btaName));
     if (cbtaName != null)
-      Printer.singleInstance().printTable(bta, new java.io.FileOutputStream(cbtaName));
+      Printer.singleInstance().printTable(bta, symbolTables, new java.io.FileOutputStream(cbtaName));
   }
 }

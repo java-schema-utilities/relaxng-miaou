@@ -72,16 +72,6 @@ public class MyDefaultBinaryTreeAutomatonFactory
     }
 
     /**
-     * Creates a default <code>ExceptNameClass</code>.
-     * This method is a hook method of the AbstractBinaryTreeAutomatonFactory.
-     *
-     * @return ExceptNameClass
-     */
-    public ExceptNameClass createExceptNameClass() {
-        return new MyExceptNameClass();
-    }
-
-    /**
      * Creates a default <code>FinalTransition</code>.
      * This method is a hook method of the AbstractBinaryTreeAutomatonFactory.
      *
@@ -111,46 +101,7 @@ public class MyDefaultBinaryTreeAutomatonFactory
         return new MyMergingTransition();
     }
 
-    /**
-     * Creates a default <code>NameClassAnyName</code>.
-     * This method is a hook method of the AbstractBinaryTreeAutomatonFactory.
-     *
-     * @return NameClassAnyName
-     */
-    public NameClassAnyName createNameClassAnyName() {
-        return new MyNameClassAnyName();
-    }
 
-
-    /**
-     * Creates a default <code>NameClassChoice</code>.
-     * This method is a hook method of the AbstractBinaryTreeAutomatonFactory.
-     *
-     * @return NameClassChoice
-     */
-    public NameClassChoice createNameClassChoice() {
-        return new MyNameClassChoice();
-    }
-
-    /**
-     * Creates a default <code>NameClassName</code>.
-     * This method is a hook method of the AbstractBinaryTreeAutomatonFactory.
-     *
-     * @return NameClassName
-     */
-    public NameClassName createNameClassName() {
-        return new MyNameClassName();
-    }
-
-    /**
-     * Creates a default <code>NameClassNsName</code>.
-     * This method is a hook method of the AbstractBinaryTreeAutomatonFactory.
-     *
-     * @return NameClassNsName
-     */
-    public NameClassNsName createNameClassNsName() {
-        return new MyNameClassNsName();
-    }
 
     /**
      * Creates a default <code>NonExistentAttributeTransition</code>.

@@ -9,7 +9,5 @@ import org.iso_relax.miaou.ss.DefineElement;
  */
 
 public class MyDefineElement extends DefineElement {
-  public IMyNameClassChoice getMyNameClass() {
-    return (IMyNameClassChoice)getNameClass();
-  }
+
 }

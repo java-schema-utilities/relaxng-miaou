@@ -13,7 +13,7 @@ import org.w3c.dom.*;
  * UJAXP
  *
  * @since   Feb. 20, 2000
- * @version Jul. 14, 2002
+ * @version Sep.  7, 2002
  * @author  ASAMI, Tomoharu (asami@relaxer.org)
  */
 public final class UJAXP {
@@ -78,6 +78,12 @@ public final class UJAXP {
 	int flags,
 	ErrorHandler handler
     ) throws IOException, SAXException, ParserConfigurationException {
+	if (uri == null || uri.length() == 0) {
+	    throw (new IllegalArgumentException());
+	}
+	if (uri.charAt(0) == '<') {
+	    return (getDocument(new StringReader(uri), flags, handler));
+	}
 	if (handler == null) {
 	    handler = getErrorHandler();
 	}
@@ -336,6 +342,12 @@ public final class UJAXP {
 	String uri,
 	ErrorHandler handler
     ) throws IOException, SAXException, ParserConfigurationException {
+	if (uri == null || uri.length() == 0) {
+	    throw (new IllegalArgumentException());
+	}
+	if (uri.charAt(0) == '<') {
+	    return (getValidDocument(new StringReader(uri), handler));
+	}
 	if (handler == null) {
 	    handler = getErrorHandler();
 	}
@@ -542,7 +554,17 @@ public final class UJAXP {
 	if (entityMap == null) {
 	    return (null);
 	} else {
-	    return ((URL)entityMap.get(systemId));
+	    String filename = _getFilename(systemId);
+	    return ((URL)entityMap.get(filename));
+	}
+    }
+
+    private static String _getFilename(String pathname) {
+	int index = pathname.lastIndexOf("/");
+	if (index == -1) {
+	    return (pathname);
+	} else {
+	    return (pathname.substring(index + 1));
 	}
     }
 

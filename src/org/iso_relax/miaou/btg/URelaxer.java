@@ -19,7 +19,7 @@ import org.w3c.dom.*;
  * URelaxer
  *
  * @since   Jan. 19, 2000
- * @version Aug. 21, 2002
+ * @version Oct.  6, 2002
  * @author  ASAMI, Tomoharu (asami@relaxer.org)
  */
 public final class URelaxer {
@@ -367,6 +367,11 @@ public final class URelaxer {
 	String name
     ) {
 	String value = getAttribute(element, name);
+/* XXX
+	if (value == null) {
+	    return (null);
+	}
+*/
 	return (makeStringList(value));
     }
 
@@ -3155,14 +3160,14 @@ public final class URelaxer {
     }
 
     public static URL getURL(String value) {
-	return (makeURL(value));
+	return (makeURL4Property(value));
     }
 
     public static URL getURLObject(Object value) {
 	if (value instanceof URL) {
 	    return ((URL)value);
 	} else {
-	    return (makeURL(value.toString()));
+	    return (makeURL4Property(value.toString()));
 	}
     }
 
@@ -3170,7 +3175,7 @@ public final class URelaxer {
 	Element element
     ) {
 	String text = element2Data(element);
-	return (makeURL(text));
+	return (makeURL4Property(text));
     }
 
     public static List getElementPropertyAsURLList(
@@ -3191,7 +3196,7 @@ public final class URelaxer {
     ) {
 	Element property = getOnlyElement(element, name);
 	String text = element2Data(property);
-	return (makeURL(text));
+	return (makeURL4Property(text));
     }
 
     public static List getElementPropertyAsURLList(
@@ -3201,7 +3206,7 @@ public final class URelaxer {
 	Element[] nodes = getElements(element, name);
 	List list = new ArrayList();
 	for (int i = 0;i < nodes.length;i++) {
-	    URL url = makeURL(element2Data(nodes[i]));
+	    URL url = makeURL4Property(element2Data(nodes[i]));
 	    if (url != null) {
 		list.add(url);
 	    }
@@ -3238,7 +3243,7 @@ public final class URelaxer {
 		break;
 	    }
 	    stack.popElement();
-	    URL url = makeURL(element2Text(property));
+	    URL url = makeURL4Property(element2Text(property));
 	    if (url != null) {
 		list.add(url);
 	    }
@@ -3254,7 +3259,7 @@ public final class URelaxer {
 	if (value == null) {
 	    return (null);
 	} else {
-	    return (makeURL(value));
+	    return (makeURL4Property(value));
 	}
     }
 
@@ -4847,7 +4852,7 @@ public final class URelaxer {
 	}
     }
     
-    public static URL makeURL(String name) {
+    public static URL makeURL4Property(String name) {
 	try {
 	    return (new URL(name));
 	} catch (Exception e) {
@@ -4863,6 +4868,14 @@ public final class URelaxer {
 	    return (new URL(base, leaf.toExternalForm()));
 	} catch (Exception e) {
 	    return (_invalidURL(e));
+	}
+    }
+
+    public static URL makeURL(String uri) throws MalformedURLException {
+	try {
+	    return (new URL(uri));
+	} catch (MalformedURLException e) {
+	    return (new File(uri).toURL());
 	}
     }
 

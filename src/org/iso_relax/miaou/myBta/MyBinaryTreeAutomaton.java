@@ -4,6 +4,8 @@ import org.iso_relax.miaou.abstractBta.*;
 import org.iso_relax.miaou.bta.*;
 import java.util.ArrayList;
 import java.io.PrintWriter;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
@@ -13,14 +15,6 @@ import java.io.PrintWriter;
 
 
 public class MyBinaryTreeAutomaton extends AbstractBinaryTreeAutomaton {
-
-  public void compactPrint(PrintWriter writer) {
-    TransitionIterator ti = new TransitionIterator(this);
-    while (ti.hasNext()) {
-      ITransition at = (ITransition)ti.next();
-      at.compactPrint(writer);
-    }
-  }
 
   public AbstractBinaryTreeAutomaton expand(int dummyState, int[] actualStates) {
     AbstractBinaryTreeAutomaton replica =
@@ -136,5 +130,22 @@ public class MyBinaryTreeAutomaton extends AbstractBinaryTreeAutomaton {
         maxState = tempState;
     }
     return maxState;
+  }
+
+
+  public void compactPrint(PrintWriter writer) {
+    TransitionIterator ti = new TransitionIterator(this);
+    while (ti.hasNext()) {
+      ITransition at = (ITransition)ti.next();
+      at.compactPrint(writer);
+    }
+  }
+
+  public void binPrint (DataOutputStream dos) throws IOException {
+    TransitionIterator ti = new TransitionIterator(this);
+    while (ti.hasNext()) {
+      ITransition at = (ITransition)ti.next();
+      at.binPrint(dos);
+    }
   }
 }

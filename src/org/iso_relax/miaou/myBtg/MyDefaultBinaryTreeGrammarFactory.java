@@ -160,51 +160,6 @@ public class MyDefaultBinaryTreeGrammarFactory extends DefaultBinaryTreeGrammarF
     }
 
     /**
-     * Creates a default <code>ExceptNameClass</code>.
-     * This method is a hook method of the AbstractBinaryTreeGrammarFactory.
-     *
-     * @return ExceptNameClass
-     */
-    public ExceptNameClass createExceptNameClass() {
-        return new MyExceptNameClass();
-    }
-    /**
-     * Creates a default <code>NameClassAnyName</code>.
-     * This method is a hook method of the AbstractBinaryTreeGrammarFactory.
-     *
-     * @return NameClassAnyName
-     */
-    public NameClassAnyName createNameClassAnyName() {
-        return new MyNameClassAnyName();
-    }
-    /**
-     * Creates a default <code>NameClassChoice</code>.
-     * This method is a hook method of the AbstractBinaryTreeGrammarFactory.
-     *
-     * @return NameClassChoice
-     */
-    public NameClassChoice createNameClassChoice() {
-        return new MyNameClassChoice();
-    }
-    /**
-     * Creates a default <code>NameClassName</code>.
-     * This method is a hook method of the AbstractBinaryTreeGrammarFactory.
-     *
-     * @return NameClassName
-     */
-    public NameClassName createNameClassName() {
-        return new MyNameClassName();
-    }
-    /**
-     * Creates a default <code>NameClassNsName</code>.
-     * This method is a hook method of the AbstractBinaryTreeGrammarFactory.
-     *
-     * @return NameClassNsName
-     */
-    public NameClassNsName createNameClassNsName() {
-        return new MyNameClassNsName();
-    }
-    /**
      * Creates a default <code>Param</code>.
      * This method is a hook method of the AbstractBinaryTreeGrammarFactory.
      *

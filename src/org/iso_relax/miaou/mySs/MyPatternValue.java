@@ -15,6 +15,7 @@ public class MyPatternValue
   extends PatternValue
   implements IMyPatternChoice, Cloneable {
 
+
   public IBtrExpChoice binarize(java.util.Hashtable defineHash) {
 
     IBinaryTreeGrammarFactory factory =
@@ -30,8 +31,8 @@ public class MyPatternValue
       BinaryTreeGrammarFactory.getFactory();
     Value copy = factory.createValue();
     copy.setContent(getContent());
-    copy.setDatatypeLibrary(getDatatypeLibrary());
-    copy.setNs(getNs());
+    copy.setDatatypeLibrary(this.getSyntaxExtensionDatatypeLibraryID());
+    copy.setNs(this.getSyntaxExtensionNsID());
     copy.setType(getType());
     return copy;
   }
@@ -57,6 +58,8 @@ public class MyPatternValue
     PatternValue copy = SimpleSyntaxFactory.getFactory().createPatternValue();
     copy.setContent(getContent());
     copy.setDatatypeLibrary(getDatatypeLibrary());
+    copy.setSyntaxExtensionDatatypeLibraryID(getSyntaxExtensionDatatypeLibraryID());
+    copy.setSyntaxExtensionNsID(getSyntaxExtensionNsID());
     copy.setNs(getNs());
     copy.setType(getType());
     return copy;

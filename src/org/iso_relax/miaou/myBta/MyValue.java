@@ -2,6 +2,8 @@ package org.iso_relax.miaou.myBta;
 
 import java.io.PrintWriter;
 import org.iso_relax.miaou.abstractBta.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:eb2m-mrt@asahi-net.or.jp">MURATA Makoto</a>
@@ -21,5 +23,11 @@ public class MyValue extends AbstractValue {
 //    this.getNs();
 //    we also have to print the namespace map, but rng2srng does not support
 //    namespace maps yet.
+  }
+
+  public void binPrint(DataOutputStream dos) throws IOException {
+    dos.writeShort(getDatatypeLibrary());
+    dos.writeUTF(getType());
+    dos.writeUTF(getContent());
   }
 }

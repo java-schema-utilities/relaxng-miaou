@@ -13,10 +13,6 @@ import java.util.Hashtable;
 public class MyBtrExpNonExistentAttribute extends BtrExpNonExistentAttribute
   implements AbstractBtrExp {
 
-  public IMyNameClassChoice getMyNameClass() {
-    return (IMyNameClassChoice)getNameClass();
-  }
-
   public AbstractBinaryTreeAutomaton automatize(Hashtable patternNameNumbers){
 
     AutomatizationUtility utility = AutomatizationUtility.singleInstance();
@@ -30,8 +26,8 @@ public class MyBtrExpNonExistentAttribute extends BtrExpNonExistentAttribute
       utility.createNonExistentAttributeTransition(
                   AutomatizationUtility.DUMMYRIGHT,
                   AutomatizationUtility.NEW1,
-                  getMyNameClass(),
-                  (MyExceptNameClass)getExceptNameClass());
+                  getNameClass(),
+                  getExceptNameClass());
 
     btaTemp.addNonExistentAttributeTransition(mneat);
 
