@@ -1,0 +1,44 @@
+# RELAX NG XML syntax specified in compact syntax.
+
+default namespace = "http://relaxng.org/ns/structure/1.0"
+namespace relaxer = "http://www.relaxer.org/xmlns/relaxer/java"
+namespace syntaxExtension = "http://www.iso_relax.org/xmlns/miaou/syntaxExtension"
+
+start = element grammar {element start {pattern}, define* }
+
+define = element define {attribute name { xsd:ID }, 
+                             element element {nameClass, pattern} }
+
+pattern = 
+    element notAllowed {empty}
+  | element empty {empty}    
+  | element text  {empty}
+  | element data  {type, datatypeLibrary, param*, exceptPattern? }
+  | element value {type, datatypeLibrary, ns, xsd:string }
+  | element list {pattern}
+  | element attribute {nameClass, pattern}
+  | element syntaxExtension:oneOrMoreAttribute {nameClass, pattern}
+  | element syntaxExtension:nonExistentAttribute {nameClass, exceptNameClass?}
+  | element ref {attribute name { xsd:IDREF } }
+  | element oneOrMore {pattern }
+  | element choice {pattern, pattern }
+  | element group {pattern, pattern}
+  | element interleave {pattern, pattern}
+
+exceptPattern = element except {pattern}
+
+##include "common.rnc"
+
+type = attribute type { xsd:NCName }
+datatypeLibrary = attribute datatypeLibrary { xsd:anyURI}
+ns = attribute ns { xsd:string }
+
+param = element param {attribute name { xsd:NCName }, xsd:string }
+
+nameClass = 
+  element anyName {exceptNameClass?} 
+  | element nsName {ns, exceptNameClass? }
+  | element name {ns, xsd:NCName }
+  | element choice {nameClass, nameClass}
+
+exceptNameClass = element except {nameClass}

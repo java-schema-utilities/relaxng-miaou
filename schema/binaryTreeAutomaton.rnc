@@ -1,0 +1,107 @@
+#Binary Tree Automata in the compact syntax.
+
+default namespace = "http://www.iso_relax.org/xmlns/miaou/binaryTreeAutomaton"
+namespace relaxer = "http://www.relaxer.org/xmlns/relaxer/java"
+
+start = binaryTreeAutomaton
+
+binaryTreeAutomaton = 
+  element binaryTreeAutomaton {
+    finalTransition*,
+    startTransition*,
+    elementTransition*,
+    textTransition*,
+    branchingTransition*,
+    mergingTransition*,
+    oneOrMoreAttributeTransition*,
+    nonExistentAttributeTransition*,
+    atomicTransition*,
+    listTransition*
+  }
+
+finalTransition = 
+  [relaxer:implements="java.lang.Cloneable"]
+  element finalTransition {state}
+
+startTransition = 
+  [relaxer:implements="java.lang.Cloneable"]
+  element startTransition {state}
+
+state       = attribute state {stateType}
+
+elementTransition = 
+  [relaxer:implements="java.lang.Cloneable"]
+  element elementTransition {target, nameClass, right, left}
+
+textTransition = 
+  [relaxer:implements="java.lang.Cloneable"]
+  element textTransition {target, right}
+#Since text do not have subordinate elements, we do not need "left".
+
+branchingTransition =
+  [relaxer:implements="java.lang.Cloneable"]
+  element branchingTransition {source, firstTarget, secondTarget}
+
+mergingTransition =
+  [relaxer:implements="java.lang.Cloneable"]
+  element mergingTransition {firstSource, secondSource, target}
+
+oneOrMoreAttributeTransition = 
+  [relaxer:implements="java.lang.Cloneable"]
+  element oneOrMoreAttributeTransition {target, nameClass, right, left}
+#The value of an attribute is constrained by the left state.
+
+nonExistentAttributeTransition = 
+  [relaxer:implements="java.lang.Cloneable"]
+  element nonExistentAttributeTransition {target, nameClass, exceptNameClass?, right}
+#Since we do not care attribute values, we do not need the left 
+#state.
+
+atomicTransition =
+  [relaxer:implements="java.lang.Cloneable"]
+  element atomicTransition {target, (data | value), right}
+#Since data or value in instances never has children, we do not need the left
+#state.  We do need the right state for handling atributes.
+
+listTransition =
+  [relaxer:implements="java.lang.Cloneable"]
+  element listTransition {target, left, right}
+
+#We assume that there is an intremediate node and it has the first
+#token as the left child.  We do need the right state for handling
+#atributes.
+
+
+stateType = xsd:int
+target       = attribute target {stateType}
+firstTarget  = attribute firstTarget {stateType}
+secondTarget = attribute secondTarget {stateType}
+source       = attribute source {stateType}
+firstSource  = attribute firstSource {stateType}
+secondSource = attribute secondSource {stateType}
+right        = attribute right {stateType}
+left         = attribute left {stateType}
+
+data =
+  element data {type, datatypeLibrary, param*, (data | value)*}
+
+value =
+  element value {type, datatypeLibrary, ns, xsd:string}
+
+#include "common.rnc"
+
+##The rest is directly borrowed from simpleSyntax.rnc.
+
+type = attribute type { xsd:NCName }
+datatypeLibrary = attribute datatypeLibrary { xsd:anyURI}
+ns = attribute ns { xsd:string }
+
+param = element param {attribute name { xsd:NCName }, xsd:string }
+
+nameClass = 
+  element anyName {exceptNameClass?} |
+  element nsName  {ns, exceptNameClass?} |
+  element name {ns, xsd:NCName } |
+  element choice {nameClass, nameClass}
+
+exceptNameClass = element except {nameClass}

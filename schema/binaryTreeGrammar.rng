@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Binary Tree Grammars in the compact syntax. -->
+<grammar xmlns:relaxer="http://www.relaxer.org/xmlns/relaxer/java" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ns="http://www.iso_relax.org/xmlns/miaou/binaryTreeGrammar" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <start>
+    <ref name="BinaryTreeGrammar"/>
+  </start>
+  <define name="BinaryTreeGrammar">
+    <element name="BinaryTreeGrammar">
+      <element name="Start">
+        <ref name="btrExp"/>
+      </element>
+      <zeroOrMore>
+        <element name="Rule">
+          <attribute name="name">
+            <data type="ID"/>
+          </attribute>
+          <ref name="btrExp"/>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="btrExp">
+    <choice>
+      <element name="NotAllowed">
+        <empty/>
+      </element>
+      <element name="End">
+        <empty/>
+      </element>
+      <element name="Variable">
+        <empty/>
+      </element>
+      <element name="Ref">
+        <attribute name="name">
+          <data type="IDREF"/>
+        </attribute>
+      </element>
+      <element name="Text">
+        <ref name="btrExp"/>
+      </element>
+      <element name="Element">
+        <ref name="nameClass"/>
+        <ref name="btrExp"/>
+        <ref name="btrExp"/>
+      </element>
+      <element name="Atomic">
+        <choice>
+          <ref name="Data"/>
+          <ref name="Value"/>
+        </choice>
+        <ref name="btrExp"/>
+      </element>
+      <element name="List">
+        <ref name="btrExp"/>
+        <ref name="btrExp"/>
+      </element>
+      <element name="OneOrMoreAttribute">
+        <ref name="nameClass"/>
+        <ref name="btrExp"/>
+        <ref name="btrExp"/>
+      </element>
+      <element name="NonExistentAttribute">
+        <ref name="nameClass"/>
+        <optional>
+          <ref name="exceptNameClass"/>
+        </optional>
+        <ref name="btrExp"/>
+      </element>
+      <element name="Choice">
+        <ref name="btrExp"/>
+        <ref name="btrExp"/>
+      </element>
+      <element name="Product">
+        <ref name="btrExp"/>
+        <ref name="btrExp"/>
+      </element>
+      <!-- Every <Variable> in the second pattern is replaced with the first pattern. -->
+      <element name="Interleave">
+        <ref name="btrExp"/>
+        <ref name="btrExp"/>
+        <ref name="btrExp"/>
+      </element>
+      <element name="OneOrMore">
+        <ref name="btrExp"/>
+      </element>
+    </choice>
+  </define>
+  <!--
+    Every <Variable> in the pattern is repeatedly replaced with the choice 
+    of itself and <Variable>.
+  -->
+  <define name="Data">
+    <element name="Data">
+      <ref name="type"/>
+      <ref name="datatypeLibrary"/>
+      <zeroOrMore>
+        <ref name="param"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <choice>
+          <ref name="Data"/>
+          <ref name="Value"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Value">
+    <element name="Value">
+      <ref name="type"/>
+      <ref name="datatypeLibrary"/>
+      <ref name="ns"/>
+      <data type="string"/>
+    </element>
+  </define>
+  <!-- include "common.rnc" -->
+  <define name="type">
+    <a:documentation>The rest is directly borrowed from simpleSyntax.rnc.</a:documentation>
+    <attribute name="type">
+      <data type="NCName"/>
+    </attribute>
+  </define>
+  <define name="datatypeLibrary">
+    <attribute name="datatypeLibrary">
+      <data type="anyURI"/>
+    </attribute>
+  </define>
+  <define name="ns">
+    <attribute name="ns">
+      <data type="string"/>
+    </attribute>
+  </define>
+  <define name="param">
+    <element name="param">
+      <attribute name="name">
+        <data type="NCName"/>
+      </attribute>
+      <data type="string"/>
+    </element>
+  </define>
+  <define name="nameClass">
+    <choice>
+      <element name="anyName">
+        <optional>
+          <ref name="exceptNameClass"/>
+        </optional>
+      </element>
+      <element name="nsName">
+        <ref name="ns"/>
+        <optional>
+          <ref name="exceptNameClass"/>
+        </optional>
+      </element>
+      <element name="name">
+        <ref name="ns"/>
+        <data type="NCName"/>
+      </element>
+      <element name="choice">
+        <ref name="nameClass"/>
+        <ref name="nameClass"/>
+      </element>
+    </choice>
+  </define>
+  <define name="exceptNameClass">
+    <element name="except">
+      <ref name="nameClass"/>
+    </element>
+  </define>
+</grammar>
