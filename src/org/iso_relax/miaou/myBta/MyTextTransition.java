@@ -20,7 +20,7 @@ public class MyTextTransition
    * @param writer
    */
   public void compactPrint(PrintWriter writer) {
-    writer.print("t ");
+    writer.print("tt ");
     writer.print(getRight());
     writer.print(" ");
     writer.println(getTarget());

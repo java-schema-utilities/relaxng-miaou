@@ -17,7 +17,7 @@ public class MyBranchingTransition extends AbstractBranchingTransition {
    * @param writer
    */
   public void compactPrint(PrintWriter writer) {
-    writer.print("b ");
+    writer.print("bt ");
     writer.print(getSource());
     writer.print(" ");
     writer.print(getFirstTarget());

@@ -18,7 +18,7 @@ public class MyElementTransition extends AbstractElementTransition {
    * @param writer
    */
   public void compactPrint(PrintWriter writer) {
-    writer.print("e ");
+    writer.print("et ");
     writer.print(getLeft());
     writer.print(" ");
     writer.print(getRight());

@@ -17,7 +17,7 @@ public class MyNonExistentAttributeTransition extends AbstractNonExistentAttribu
    * @param writer
    */
   public void compactPrint(PrintWriter writer) {
-    writer.print("n ");
+    writer.print("nt ");
     writer.print(getRight());
     writer.print(" ");
     writer.print(getTarget());

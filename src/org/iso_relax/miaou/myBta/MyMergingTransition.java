@@ -17,7 +17,7 @@ public class MyMergingTransition extends AbstractMergingTransition {
    * @param writer
    */
   public void compactPrint(PrintWriter writer) {
-    writer.print("m ");
+    writer.print("mt ");
     writer.print(getFirstSource());
     writer.print(" ");
     writer.print(getSecondSource());

@@ -17,7 +17,7 @@ public class MyStartTransition extends AbstractStartTransition {
    * @param writer
    */
   public void compactPrint(PrintWriter writer) {
-    writer.print("s ");
+    writer.print("ss ");
     writer.println(getState());
   }
 

@@ -22,7 +22,7 @@ public class MyAtomicTransition extends AbstractAtomicTransition
    * @param writer
    */
   public void compactPrint(PrintWriter writer) {
-    writer.print("a ");
+    writer.print("at ");
     writer.print(getRight());
     writer.print(" ");
     writer.print(getTarget());

@@ -17,7 +17,7 @@ public class MyOneOrMoreAttributeTransition extends AbstractOneOrMoreAttributeTr
    * @param writer
    */
   public void compactPrint(PrintWriter writer) {
-    writer.print("o ");
+    writer.print("ot ");
     writer.print(getLeft());
     writer.print(" ");
     writer.print(getRight());

@@ -17,7 +17,7 @@ public class MyFinalTransition extends AbstractFinalTransition {
    * @param writer
    */
   public void compactPrint(PrintWriter writer) {
-    writer.print("f ");
+    writer.print("fs ");
     writer.println(getState());
   }
 
