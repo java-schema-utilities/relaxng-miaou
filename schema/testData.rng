@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+  <start>
+    <element name="testData">
+      <zeroOrMore>
+        <element name="case">
+          <optional>
+            <attribute name="rnc"/>
+          </optional>
+          <optional>
+            <attribute name="rng"/>
+          </optional>
+          <optional>
+            <attribute name="ss"/>
+          </optional>
+          <optional>
+            <attribute name="nss"/>
+          </optional>
+          <optional>
+            <attribute name="btg"/>
+          </optional>
+          <optional>
+            <attribute name="bta"/>
+          </optional>
+          <optional>
+            <attribute name="cbta"/>
+          </optional>
+        </element>
+      </zeroOrMore>
+    </element>
+  </start>
+</grammar>

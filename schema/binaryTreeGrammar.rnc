@@ -1,0 +1,61 @@
+#Binary Tree Grammars in the compact syntax.
+
+default namespace = "http://www.iso_relax.org/xmlns/miaou/binaryTreeGrammar"
+namespace relaxer = "http://www.relaxer.org/xmlns/relaxer/java"
+
+start = BinaryTreeGrammar
+
+BinaryTreeGrammar = 
+  element BinaryTreeGrammar {
+    element Start {btrExp}, 
+    element Rule {attribute name {xsd:ID}, btrExp}*
+  }
+
+btrExp = 
+  element NotAllowed {empty} | 
+  element End {empty} |
+  element Variable {empty} | 
+  element Ref {attribute name {xsd:IDREF}} | 
+  element Text {btrExp} |
+  element Element {nameClass, btrExp, btrExp} | 
+  element Atomic {(Data | Value), btrExp} |
+  element List {btrExp, btrExp} |
+  element OneOrMoreAttribute {nameClass, btrExp, btrExp} |
+  element NonExistentAttribute {nameClass, exceptNameClass?, btrExp} |
+  element Choice {btrExp, btrExp} |
+
+  element Product {btrExp, btrExp} |
+#Every <Variable> in the second pattern is replaced with the first pattern.
+
+  element Interleave {btrExp, btrExp, btrExp} |
+
+  element OneOrMore {btrExp}
+#Every <Variable> in the pattern is repeatedly replaced with the choice 
+#of itself and <Variable>.
+
+Data = 
+  element Data {type, datatypeLibrary, param*, (Data | Value)*}
+
+Value =
+  element Value {type, datatypeLibrary, ns, xsd:string}
+
+#include "common.rnc"
+
+##The rest is directly borrowed from simpleSyntax.rnc.
+
+type = attribute type { xsd:NCName }
+datatypeLibrary = attribute datatypeLibrary { xsd:anyURI}
+ns = attribute ns { xsd:string }
+
+param = element param {attribute name { xsd:NCName }, xsd:string }
+
+nameClass = 
+  element anyName {exceptNameClass?} |
+  element nsName {ns, exceptNameClass? } |
+  element name {ns, xsd:NCName } |
+  element choice {nameClass, nameClass}
+
+exceptNameClass = element except {nameClass}
+
+
+

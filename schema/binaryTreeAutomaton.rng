@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Binary Tree Automata in the compact syntax. -->
+<grammar xmlns:relaxer="http://www.relaxer.org/xmlns/relaxer/java" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ns="http://www.iso_relax.org/xmlns/miaou/binaryTreeAutomaton" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <start>
+    <ref name="binaryTreeAutomaton"/>
+  </start>
+  <define name="binaryTreeAutomaton">
+    <element name="binaryTreeAutomaton">
+      <zeroOrMore>
+        <ref name="finalTransition"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="startTransition"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="elementTransition"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="textTransition"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="branchingTransition"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="mergingTransition"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="oneOrMoreAttributeTransition"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="nonExistentAttributeTransition"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="atomicTransition"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="listTransition"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="finalTransition">
+    <element name="finalTransition" relaxer:implements="java.lang.Cloneable">
+      <ref name="state"/>
+    </element>
+  </define>
+  <define name="startTransition">
+    <element name="startTransition" relaxer:implements="java.lang.Cloneable">
+      <ref name="state"/>
+    </element>
+  </define>
+  <define name="state">
+    <attribute name="state">
+      <ref name="stateType"/>
+    </attribute>
+  </define>
+  <define name="elementTransition">
+    <element name="elementTransition" relaxer:implements="java.lang.Cloneable">
+      <ref name="target"/>
+      <ref name="nameClass"/>
+      <ref name="right"/>
+      <ref name="left"/>
+    </element>
+  </define>
+  <define name="textTransition">
+    <element name="textTransition" relaxer:implements="java.lang.Cloneable">
+      <ref name="target"/>
+      <ref name="right"/>
+    </element>
+  </define>
+  <!-- Since text do not have subordinate elements, we do not need "left". -->
+  <define name="branchingTransition">
+    <element name="branchingTransition" relaxer:implements="java.lang.Cloneable">
+      <ref name="source"/>
+      <ref name="firstTarget"/>
+      <ref name="secondTarget"/>
+    </element>
+  </define>
+  <define name="mergingTransition">
+    <element name="mergingTransition" relaxer:implements="java.lang.Cloneable">
+      <ref name="firstSource"/>
+      <ref name="secondSource"/>
+      <ref name="target"/>
+    </element>
+  </define>
+  <define name="oneOrMoreAttributeTransition">
+    <element name="oneOrMoreAttributeTransition" relaxer:implements="java.lang.Cloneable">
+      <ref name="target"/>
+      <ref name="nameClass"/>
+      <ref name="right"/>
+      <ref name="left"/>
+    </element>
+  </define>
+  <!-- The value of an attribute is constrained by the left state. -->
+  <define name="nonExistentAttributeTransition">
+    <element name="nonExistentAttributeTransition" relaxer:implements="java.lang.Cloneable">
+      <ref name="target"/>
+      <ref name="nameClass"/>
+      <optional>
+        <ref name="exceptNameClass"/>
+      </optional>
+      <ref name="right"/>
+    </element>
+  </define>
+  <!--
+    Since we do not care attribute values, we do not need the left 
+    state.
+  -->
+  <define name="atomicTransition">
+    <element name="atomicTransition" relaxer:implements="java.lang.Cloneable">
+      <ref name="target"/>
+      <choice>
+        <ref name="data"/>
+        <ref name="value"/>
+      </choice>
+      <ref name="right"/>
+    </element>
+  </define>
+  <!--
+    Since data or value in instances never has children, we do not need the left
+    state.  We do need the right state for handling atributes.
+  -->
+  <define name="listTransition">
+    <element name="listTransition" relaxer:implements="java.lang.Cloneable">
+      <ref name="target"/>
+      <ref name="left"/>
+      <ref name="right"/>
+    </element>
+  </define>
+  <!--
+    We assume that there is an intremediate node and it has the first
+    token as the left child.  We do need the right state for handling
+    atributes.
+  -->
+  <define name="stateType">
+    <data type="int"/>
+  </define>
+  <define name="target">
+    <attribute name="target">
+      <ref name="stateType"/>
+    </attribute>
+  </define>
+  <define name="firstTarget">
+    <attribute name="firstTarget">
+      <ref name="stateType"/>
+    </attribute>
+  </define>
+  <define name="secondTarget">
+    <attribute name="secondTarget">
+      <ref name="stateType"/>
+    </attribute>
+  </define>
+  <define name="source">
+    <attribute name="source">
+      <ref name="stateType"/>
+    </attribute>
+  </define>
+  <define name="firstSource">
+    <attribute name="firstSource">
+      <ref name="stateType"/>
+    </attribute>
+  </define>
+  <define name="secondSource">
+    <attribute name="secondSource">
+      <ref name="stateType"/>
+    </attribute>
+  </define>
+  <define name="right">
+    <attribute name="right">
+      <ref name="stateType"/>
+    </attribute>
+  </define>
+  <define name="left">
+    <attribute name="left">
+      <ref name="stateType"/>
+    </attribute>
+  </define>
+  <define name="data">
+    <element name="data">
+      <ref name="type"/>
+      <ref name="datatypeLibrary"/>
+      <zeroOrMore>
+        <ref name="param"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <choice>
+          <ref name="data"/>
+          <ref name="value"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="value">
+    <element name="value">
+      <ref name="type"/>
+      <ref name="datatypeLibrary"/>
+      <ref name="ns"/>
+      <data type="string"/>
+    </element>
+  </define>
+  <!-- include "common.rnc" -->
+  <define name="type">
+    <a:documentation>The rest is directly borrowed from simpleSyntax.rnc.</a:documentation>
+    <attribute name="type">
+      <data type="NCName"/>
+    </attribute>
+  </define>
+  <define name="datatypeLibrary">
+    <attribute name="datatypeLibrary">
+      <data type="anyURI"/>
+    </attribute>
+  </define>
+  <define name="ns">
+    <attribute name="ns">
+      <data type="string"/>
+    </attribute>
+  </define>
+  <define name="param">
+    <element name="param">
+      <attribute name="name">
+        <data type="NCName"/>
+      </attribute>
+      <data type="string"/>
+    </element>
+  </define>
+  <define name="nameClass">
+    <choice>
+      <element name="anyName">
+        <optional>
+          <ref name="exceptNameClass"/>
+        </optional>
+      </element>
+      <element name="nsName">
+        <ref name="ns"/>
+        <optional>
+          <ref name="exceptNameClass"/>
+        </optional>
+      </element>
+      <element name="name">
+        <ref name="ns"/>
+        <data type="NCName"/>
+      </element>
+      <element name="choice">
+        <ref name="nameClass"/>
+        <ref name="nameClass"/>
+      </element>
+    </choice>
+  </define>
+  <define name="exceptNameClass">
+    <element name="except">
+      <ref name="nameClass"/>
+    </element>
+  </define>
+</grammar>

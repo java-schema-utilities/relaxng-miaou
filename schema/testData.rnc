@@ -1,0 +1,8 @@
+start = element testData {
+            element case {attribute rnc   {text}?,
+                          attribute rng   {text}?,
+                          attribute ss    {text}?,
+                          attribute nss   {text}?,
+                          attribute btg   {text}?,
+                          attribute bta   {text}?,
+                          attribute cbta  {text}?}*}
