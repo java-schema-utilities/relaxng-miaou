@@ -1,0 +1,157 @@
+Conversion from hedge regular grammars to binary tree regular grammars
+
+2002 August 25
+
+MURATA Makoto
+
+0. Main idea
+
+bin(0)		= 0
+bin(a[x])	= a[x, z]
+bin(r1 r2)	= bin(r2) @ bin(r1)
+		  where @ is a pointed product
+bin(r1|r2)	= bin(r1) | bin(r2)
+bin(r1*)	= bin(r1) @*
+		  where @ is a pointed star
+
+1. Algorithm
+
+#We transform a hedge regular grammar to a binary regular tree grammar
+#by transforming each rule of the hedge regular grammar to a rule 
+#of the binary regular tree grammar.
+
+#Rules of binary regular tree grammars have 
+#binary tree regular expressions in the right-hand side.
+#A binary tree regular expression is defined by "btrExp" in 
+#binaryTreeRegularGrammar.rnc.
+
+#The function bin provides the transformation.  
+
+bin(<grammar><start>top</start>definition...</grammar>)
+   = <BinaryTreeGrammar>
+       <Start>
+         <Product><End/> bin(top)</Product>
+       </Start>
+       bin(definition)...
+     </BinaryTreeGrammar>
+
+but also creates a HashTable, which maps names to patterns.
+
+bin(<notAllowed/>) = <NotAllowed/>
+bin(<empty/>) = <Variable/>
+bin(<text/>)  = <Choice>
+                   <OneOrMore><Text><Variable/></Text></OneOrMore>
+                   <Variable/>
+                </Choice>
+
+
+bin(<data>@type, @datatypeLibrary,  param*, exceptPattern?</data>)
+  = <Atomic>
+      <Data>@type, @datatypeLibrary, param*, bin-except(exceptPattern)?</Data>
+      <Variable/>
+    </Atomic>
+
+#Note that <data> may be followed by <oneOrMoreAttribute>. 
+
+bin(<value>@type, @datatypeLibrary, @ns, xsd:string</value>)
+  = <Atomic>
+       <Value>@type, @datatypeLibrary, @ns, xsd:string</Value>
+       <Variable/>
+    </Atomic>
+
+#Note that <value> may be followed by <oneOrMoreAttribute>. 
+
+bin-except(<except>p</except>) = bin-except(p)
+bin-except(<choice>p1 p2</choice>) = bin-except(p1) bin-except(p2)
+bin-except(<data>@type, @datatypeLibrary, param*, exceptPattern?</data>)
+   = <Data>@type, @datatypeLibrary, param*, bin-except(exceptPattern)?</Data>
+bin-except(<value>@type, @datatypeLibrary, @ns, xsd:string</value>)
+   = <Value>@type, @datatypeLibrary, @ns, xsd:string</Value>
+
+bin(<list>p</list>)
+  = <List>
+      <Product><End/> bin(p)</Product>
+      <Variable/>
+    </List>
+
+#Note that <list> may be followed by <oneOrMoreAttribute>. 
+
+bin(<oneOrMoreattribute>nameClass, p</oneOrMoreattribute>)
+  = <OneOrMoreAttirbute>
+      nameClass
+      <Product><End/> bin(p)</Product>
+      <Variable/>
+    </oneOrMoreAttribute>
+
+bin(<sse:nonExistentAttribute>nameClass </sse:nonExistentAttribute>)
+  = <NonExistentAttribute> nameClass <Variable/> </NonExistentAttribute>
+
+bin(<choice>p1 p2</choice>) = <Choice>bin(p1) bin(p2)</Choice>
+
+bin(<group>p1 p2</group>)
+   = <Product>bin(p2) bin(p1)</Product>
+
+bin(<interleave>p1 p2</interleave>) = 
+  <Interleave>
+    <Product><End/> bin(p1)</Product>
+    <Product><End/> bin(p2)</Product>
+    <Variable/>
+  </Interleave>
+
+bin(<oneOrMore>p</oneOrMore>)
+   = <OneOrMore>bin(p)</OneOrMore>
+
+##<define name=nm><element> nameClass top</element></define> and 
+##<ref name="nm"/> is assumed as <define name=nm>top</define> and 
+##<element>nameClass <ref name="nm"/></element>, respectively.
+
+bin(<define>nameNCName <element>nameClass top</element></define>)
+   = <Rule>nameNCName 
+       <Product><End/> bin(top)</Product>
+     </Rule>
+
+bin(<ref name=nm"/>)
+   = <Element>
+       nameClass
+       <Ref name="nm"/>
+       <Variable/>
+     </Element>
+
+where <define name="nm"><element>nameClass top</element></define>
+
+Note: This <Variable> is used to reference to the next sibling.
+
+
+2. Implementation
+
+Class: Binarize.java
+
+This class provides a funcational object.  It has no instance 
+variables.
+
+public methods
+
+void convert(RootGrammar, BinaryTreeGrammar)
+
+private methods
+
+void convert(PatternNotAllowed, AbstractBtrExp)
+void convert(PatternEmpty, AbstractBtrExp)
+void convert(PatternText, AbstractBtrExp)
+void convert(PatternData, AbstractBtrExp)
+void convert(PatternValue, AbstractBtrExp)
+void convert(PatternList, AbstractBtrExp)
+void convert(PatternAttribute, AbstractBtrExp)
+void convert(PatternNonExistentAttribute, AbstractBtrExp)
+void convert(PatternChoice, AbstractBtrExp)
+void convert(PatternGroup, AbstractBtrExp)
+void convert(PatternInterleave, AbstractBtrExp)
+void convert(PatternOneOrMore, AbstractBtrExp)
+
+void convert(Define, BinaryTreeGrammarRule)
+void convert(PatternRef, AbstractBtrExp) 
+
+void flatten(ExceptPattern, ...)
+void flatten(PatternChoice, ...)
+void flatten(PatternData, ...)
+void flatten(PatternValue, ...)
